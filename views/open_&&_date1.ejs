@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://harshen.github.io/jquery-countdownTimer/jquery.countdownTimer.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            list-style: none;
+            text-decoration: none;
+            font-family: 'Josefin Sans', sans-serif;
+        }
+
+        body {
+            background-color: #f3f5f9;
+        }
+
+        .wrapper {
+            display: flex;
+            position: relative;
+        }
+
+        .wrapper .sidebar {
+            width: 200px;
+            height: 100%;
+            background: #fbfbfd;
+            padding: 30px 0px;
+            position: fixed;
+        }
+
+        .wrapper .sidebar h2 {
+            color: #fff;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .wrapper .sidebar ul li {
+            padding: 15px;
+            border-bottom: 1px solid #2D3250;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .wrapper .sidebar ul li a {
+            color: #2D3250;
+            display: block;
+        }
+
+        .wrapper .sidebar ul li a .fas {
+            width: 25px;
+        }
+
+        .wrapper .sidebar ul li:hover {
+            background-color: #FC7300;
+        }
+
+        .wrapper .sidebar ul li:hover a {
+            color: #fff;
+        }
+
+        .wrapper .sidebar .social_media {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+        }
+
+        .wrapper .sidebar .social_media a {
+            display: block;
+            width: 40px;
+            background: #FC7300;
+            height: 40px;
+            line-height: 45px;
+            text-align: center;
+            margin: 0 5px;
+            color: #305673;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+
+        .wrapper .main_content {
+            width: 100%;
+            margin-left: 200px;
+        }
+
+        .wrapper .main_content .header {
+            padding: 20px;
+            background: #fff;
+            color: #717171;
+            border-bottom: 1px solid #e0e4e8;
+        }
+
+        .wrapper .main_content .info {
+            margin: 20px;
+            color: #717171;
+            line-height: 25px;
+        }
+
+        .wrapper .main_content .info div {
+            margin-bottom: 20px;
+        }
+    </style>
+    <style>
+        .center-container {
+            width: 500px;
+            padding: 40px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            box-shadow: 0px 10px 13px -6px rgba(0, 0, 0, 0.08), 0px 20px 31px 3px rgba(0, 0, 0, 0.09), 0px 8px 20px 7px rgba(0, 0, 0, 0.02);
+            border: none;
+            border-radius: 25px;
+            text-align: center;
+        }
+
+        #countdowntimer {
+            width: fit-content;
+            margin: 10px auto;
+            /* Adjust as needed */
+            font-size: 20px;
+            padding: 10px;
+            -webkit-font-smoothing: antialiased;
+            color: #f00d0d;
+            background-color: #FFF;
+            border: 2px solid red;
+            border-radius: 10px;
+        }
+
+        #update {
+            border: 2px solid #2D3250;
+            background: none;
+            display: block;
+            margin: 20px auto;
+            text-align: center;
+            padding: 15px 40px;
+            outline: none;
+            color: rgb(10, 10, 10);
+            font-size: 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: 200;
+            transition: 250ms background ease;
+            -webkit-transition: 250ms background ease;
+            -moz-transition: 250ms background ease;
+            -o-transition: 250ms background ease;
+        }
+
+        #update:hover {
+            background: #2D3250;
+        }
+
+        #SESSION {
+            border: 2px solid #0097e6;
+            background: none;
+            display: block;
+            margin: 20px auto;
+            padding: 15px 45px;
+            width: 400px;
+            font-size: 20px;
+            outline: none;
+            color: rgb(10, 10, 10);
+            border-radius: 25px;
+            text-align: center;
+            transition: 250ms width ease, 250ms border-color ease;
+            box-shadow: 0px 10px 13px -6px rgba(0, 0, 0, 0.08), 0px 20px 31px 3px rgba(0, 0, 0, 0.09), 0px 8px 20px 7px rgba(0, 0, 0, 0.02);
+        }
+
+        #SESSION:hover {
+            width: 300px;
+        }
+
+        #SESSION:focus {
+            width: 300px;
+            border-color: #6fb98f;
+        }
+
+        /* Define font family and size for the whole document */
+        /* Define font family and size for the whole document */
+        html {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 16px;
+        }
+
+        /* Set a background color */
+        body {
+            background-color: #f2f2f2;
+        }
+
+        /* Define the sidebar */
+        .my-own-container .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 220px;
+            background-color: #fcfcfc;
+            z-index: 1000;
+            /* Set a high z-index */
+        }
+
+        .my-own-container .navbar-brand {
+            background-image: url('./Capture\ d’écran\ 2023-04-09\ 033300.png');
+            background-repeat: no-repeat;
+            background-size: contain;
+            width: 190px;
+            /* set the width of your image */
+            height: 50px;
+            /* set the height of your image */
+            display: block;
+            /* make the link a block element */
+            text-indent: -9999px;
+            /* hide the link text */
+            margin-top: 50px;
+            margin-left: 16px;
+        }
+
+
+        /* Style the navigation */
+        .my-own-container .my-nav {
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        .my-own-container .my-nav ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+
+        .my-own-container .my-nav li {
+            margin-bottom: 15px;
+        }
+
+
+        .my-own-container .my-nav a:hover {
+            background-color: #FC7300;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+    
+
+
+        /* Define the main content area */
+        .my-own-container .main {
+            display: flex;
+        }
+
+        .my-own-container #content-container {
+            position: absolute;
+            top: 0;
+            left: 250px;
+            /* Set the left position to the width of the sidebar */
+            right: 0;
+            bottom: 0;
+            padding: 20px;
+            overflow-y: auto;
+            /* Add vertical scroll if necessary */
+        }
+
+      
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn-reclamation {
+            background-color: #2D3250;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-reclamation:hover {
+            background-color: #2D3250;
+        }
+
+        .btn-reclamation11 {
+            background-color: #A76F6F;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-reclamation11:hover {
+            background-color: #a71d2a;
+        }
+    </style>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .wrapper {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        #sidebar {
+            min-width: 250px;
+            max-width: 250px;
+            background: #2D4356;
+            color: #fff;
+            transition: all 0.3s;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        #content {
+            width: 100%;
+            padding: 20px;
+            transition: all 0.3s;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .box {
+            width: 500px;
+            padding: 40px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            box-shadow: 0px 10px 13px -6px rgba(0, 0, 0, 0.08), 0px 20px 31px 3px rgba(0, 0, 0, 0.09), 0px 8px 20px 7px rgba(0, 0, 0, 0.02);
+            border: none;
+            border-radius: 25px;
+            text-align: center;
+        }
+
+        #date {
+            border: 2px solid #0097e6;
+            background: none;
+            display: block;
+            margin: 20px auto;
+            padding: 15px 45px;
+            width: 400px;
+            font-size: 20px;
+            outline: none;
+            color: rgb(10, 10, 10);
+            border-radius: 25px;
+            text-align: center;
+            transition: 250ms width ease, 250ms border-color ease;
+            box-shadow: 0px 10px 13px -6px rgba(0, 0, 0, 0.08), 0px 20px 31px 3px rgba(0, 0, 0, 0.09), 0px 8px 20px 7px rgba(0, 0, 0, 0.02);
+        }
+
+        #date:hover {
+            width: 300px;
+        }
+
+        #date:focus {
+            width: 300px;
+            border-color: #6fb98f;
+        }
+
+        #submit {
+            border: 2px solid #2D3250;
+            background: none;
+            display: block;
+            margin: 20px auto;
+            text-align: center;
+            padding: 15px 40px;
+            outline: none;
+            color: rgb(10, 10, 10);
+            font-size: 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: 200;
+            transition: 250ms background ease;
+            -webkit-transition: 250ms background ease;
+            -moz-transition: 250ms background ease;
+            -o-transition: 250ms background ease;
+        }
+
+        #submit:hover {
+            background: #2D3250;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="sidebar">
+            <h2>Sidebar</h2>
+            <ul>
+                <li><a style="text-decoration: none;" id="home" href="/home1"><i class="fas fa-home"></i>Accueil</a>
+                </li>
+                <li><a style="text-decoration: none;" id="er" href="/eleve"><i class="fas fa-user"></i>Etudiant
+                        reclamer</a>
+                </li>
+                <li><a style="text-decoration: none;" id="m" href="/matier"><i
+                            class="fas fa-address-card"></i>Matieres</a>
+                </li>
+                <li><a style="text-decoration: none;" id="r" href="/r"><i class="fas fa-chart-bar"></i>Statistique</a>
+                </li>
+                <li><a style="text-decoration: none;" id="table" href="/table"><i class="fas fa-table"></i>PV</a></li>
+                <li><a style="text-decoration: none;" id="date_open" href="/date"><i class="fas fa-clock"></i>Ouvrir la
+                        réclamation</a></li>
+                <li><a style="text-decoration: none;" id="date_prof" href="/date_prof"><i
+                            class="fas fa-clock"></i>Ouvrir la
+                        réclamation</a></li>
+            </ul>
+            <div class="social_media">
+                <li><a id="Logout" href="/log"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+              </div>
+        
+        </div>
+        <div class="main_content">
+            <div id="content-container">
+                <% if(date=="open" ){%>
+                    <div class="center-container">
+                        <h2>pour modifier la date de reclamation des etudiants click sur modifier pour plus de detail
+                        </h2>
+
+                        <div id="countdowntimer">
+                            <span class="future_date"></span>
+                        </div>
+                        <button id="update">modifier</button>
+                    </div>
+                    <%}%>
+                        <% if(date=="termine" || date=="close" ){%>
+                            <section class="home">
+                                <form class="box" id="myForm" action="/date_open" method="post"
+                                    onsubmit="return validateForm()" target="_self">
+                                    <h3>ouvrir la réclamation et déterminer la date limite</h3>
+                                    <input type="number" value="<%=formCount%>" placeholder="Nombre" id="date"
+                                        name="formCount" onfocus="(this.type = 'number')" required>
+                                    <input name="date" value="<%=years%>" value="2024-12-30" placeholder="Date"
+                                        type="text" id="date" onfocus="(this.type = 'date')" required>
+                                    <input name="time" value="<%=times%>" placeholder="Temps" type="text" id="date"
+                                        onfocus="(this.type = 'time')" required>
+                                    <select name="SESSION" id="SESSION">
+                                        <option value="<%=action%>">Choisir...</option>
+                                        <option value="SN">Session Normale</option>
+                                        <option value="SR">Session Rettrapage</option>
+                                    </select>
+                                    <input type="submit" id="submit" value="Submit">
+                                </form>
+                            </section>
+                            <%}%>
+                                <script>
+                                    function validateForm() {
+                                        var sessionSelect = document.getElementById("SESSION");
+                                        var selectedOption = sessionSelect.value;
+
+                                        if (selectedOption !== "SR" && selectedOption !== "SN") {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Attention',
+                                                text: 'Veuillez choisir une session (SR ou SN) avant de soumettre le formulaire.',
+                                                confirmButtonColor: '#d33', // Couleur du bouton de confirmation
+                                                background: '#f4f4f4' // Couleur de fond de l'alerte
+                                            });
+                                            return false; // Empêcher la soumission du formulaire
+                                        }
+                                        return true; // Autoriser la soumission du formulaire
+                                    }
+
+                                </script>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+            <script>
+                $(document).ready(function () {
+                    $('#sidebarCollapse').on('click', function () {
+                        $('#sidebar').toggleClass('active');
+                    });
+                });
+            </script>
+            <% if(date=="open" ){%>
+
+                <script>
+
+                    $('.future_date').countdowntimer({
+
+                        dateAndTime: '<%= dd %>',
+                    });
+                    console.log("in");
+                    console.log('<%= dd %>')
+                </script>
+                <%}%>
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>
+<script>
+    $(document).ready(function () {
+        var url = window.location.href;
+        if (url.endsWith('/admin')) {
+            loadContent('/reclamations');
+        }
+        // handle link clicks
+        $(document).on('click', 'a', function (event) {
+            event.preventDefault();
+            var url = $(this).attr('href');
+            loadContent(url);
+            history.pushState({ url: url }, null, url);
+        });
+
+        // handle back/forward buttons
+        window.addEventListener('popstate', function (event) {
+            if (event.state != null) {
+                loadContent(event.state.url);
+            } else {
+                loadContent('/reclamations');
+            }
+        });
+
+        // check for hash in URL
+        if (window.location.hash) {
+            var hash = window.location.hash.substring(1);
+            loadContent(hash);
+        }
+        $('#table').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/table'; // redirect the user to the logout page
+        });
+        $('#update').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/date_update'; // redirect the user to the logout page
+        });
+        $('#Logout').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/log'; // redirect the user to the logout page
+        });
+        $('#r').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/r'; // redirect the user to the logout page
+        });
+        $('#er').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/eleve'; // redirect the user to the logout page
+        });
+        $('#et').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/eleve1'; // redirect the user to the logout page
+        });
+        $('#m').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/matier'; // redirect the user to the logout page
+        });
+        $('#Reclamations').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/eleve_prof'; // redirect the user to the logout page
+        });
+        $('#date_open').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/date'; // redirect the user to the logout page
+        });
+        $('#matieres').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/matierr'; // redirect the user to the logout page
+        });
+        $('#date_prof').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/date_prof'; // redirect the user to the logout page
+        });
+        $('#env').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/env_reclamation'; // redirect the user to the logout page
+        }); $('#home').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/home1'; // redirect the user to the logout page
+        });
+        $('#rec').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/reclamation'; // redirect the user to the logout page
+        });
+    });
+
+    function loadContent(url) {
+        $("#content-container").load(url);
+    }
+</script>

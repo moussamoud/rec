@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Side Navigation Bar</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+  <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+</head>
+<style>
+  .label1 {
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+
+  .select1 {
+    padding: 8px;
+
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    box-sizing: border-box;
+    width: 150px;
+    /* Largeur minimale pour les sélecteurs */
+
+    font-size: 13px;
+    border-radius: 20em;
+    font-family: inherit;
+    box-shadow: 0 0.7em 1.5em -0.5em #f0f0f098;
+    letter-spacing: 0.09em;
+    border-radius: 20em;
+    cursor: pointer;
+    touch-action: manipulation;
+
+
+
+  }
+
+  .option1 {
+    min-width: 150px;
+    /* Largeur minimale pour les options */
+
+  }
+
+  .select-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    /* Pour prendre toute la hauteur de la vue */
+    padding-right: 20px;
+    /* Espacement à droite */
+  }
+
+  .b {
+    margin-bottom: 10px;
+    font-weight: bold;
+    padding: 8px;
+    margin-left: 30px;
+
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    box-sizing: border-box;
+    width: 150px;
+    /* Largeur minimale pour les sélecteurs */
+    border: none;
+    font-size: 13px;
+
+
+    /* Largeur minimale pour les options */
+
+    display: flex;
+
+    align-items: center;
+    /* Pour prendre toute la hauteur de la vue */
+    /* Espacement à droite */
+    display: flex;
+    align-items: center;
+    font-family: inherit;
+    font-weight: 500;
+
+    padding: 0.7em 1.4em 0.7em 1.1em;
+    color: white;
+    background: #ad5389;
+    background: #173550;
+    border: none;
+    
+    letter-spacing: 0.05em;
+
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+
+
+  #chartdiv {
+    width: 100%;
+    height: 400px;
+    display: inline-block;
+    vertical-align: top;
+
+  }
+
+  #statsContainer {
+    display: inline-block;
+    vertical-align: top;
+    /* Aligner le container des stats en haut */
+    margin-left: 300px;
+    /* Ajouter une marge à gauche pour l'espace */
+  }
+
+  #statsContainer p {
+    margin-bottom: 10px;
+    /* Ajouter une marge en bas pour l'espace entre les paragraphes */
+  }
+
+  #decisionChartContainer {
+    max-width: 550px;
+    /* Définissez une largeur maximale pour le conteneur */
+    margin: 0 auto;
+    /* Centrez le conteneur horizontalement */
+    padding: 10px;
+    /* Ajoutez un espacement intérieur pour un meilleur aspect */
+
+  }
+
+  #decisionBarChart {
+    background-color: rgb(192, 173, 209);
+    /* Ajoutez une couleur de fond au canevas */
+    border-radius: 10px;
+    /* Ajoutez des coins arrondis au canevas */
+    width: 800px;
+    height: 500px;
+    font-size: 20px;
+    font-weight: bold;
+
+  }
+
+  /* Define font family and size for the whole document */
+  html {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+  }
+
+  /* Set a background color */
+  body {
+    background-color: #f2f2f2;
+  }
+
+  /* Define the sidebar */
+  .my-own-container .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 220px;
+    background-color: #fcfcfc;
+    z-index: 1000;
+    /* Set a high z-index */
+  }
+
+  .my-own-container .navbar-brand {
+    background-image: url('./Capture\ d’écran\ 2023-04-09\ 033300.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 190px;
+    /* set the width of your image */
+    height: 50px;
+    /* set the height of your image */
+    display: block;
+    /* make the link a block element */
+    text-indent: -9999px;
+    /* hide the link text */
+    margin-top: 50px;
+    margin-left: 16px;
+  }
+
+
+  /* Style the navigation */
+  .my-own-container .my-nav {
+    margin-top: 60px;
+    text-align: center;
+  }
+
+  .my-own-container .my-nav ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+
+  .my-own-container .my-nav li {
+    margin-bottom: 15px;
+  }
+
+  .my-own-container .my-nav a {
+    display: block;
+    padding: 10px;
+    color: #2D3250;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .my-own-container .my-nav a:hover {
+    background-color: #FC7300;
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .my-own-container .my-nav .active a {
+    background-color: #525151;
+  }
+
+
+  /* Define the main content area */
+  .my-own-container .main {
+    display: flex;
+  }
+
+  .my-own-container #content-container {
+    position: absolute;
+    top: 0;
+    left: 250px;
+    /* Set the left position to the width of the sidebar */
+    right: 0;
+    bottom: 0;
+    padding: 20px;
+    overflow-y: auto;
+    /* Add vertical scroll if necessary */
+  }
+
+
+
+  /* css ouverture reclamation */
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .btn-reclamation {
+    background-color: #2D3250;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .btn-reclamation:hover {
+    background-color: #2D3250;
+  }
+
+  .btn-reclamation11 {
+    background-color: #A76F6F;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .btn-reclamation11:hover {
+    background-color: #a71d2a;
+  }
+
+
+  /* Ajoutez ces styles pour déplacer le graphe à gauche */
+  #chartContainer {
+    margin: 0 auto;
+    /* Centre le graphe horizontalement */
+    width: 50%;
+    /* Ajustez la largeur selon vos préférences */
+  }
+
+  /* Ajoutez ces styles pour centrer le titre du graphe */
+  .chart-title {
+    text-align: center;
+  }
+</style>
+
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    font-family: 'Josefin Sans', sans-serif;
+  }
+
+  body {
+    background-color: #f3f5f9;
+  }
+
+  .wrapper {
+    display: flex;
+    position: relative;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .wrapper .sidebar {
+    width: 200px;
+    height: 100%;
+    background: #fbfbfd;
+    padding: 30px 0px;
+    position: fixed;
+  }
+
+  .wrapper .sidebar h2 {
+    color: #fff;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .wrapper .sidebar ul li {
+    padding: 15px;
+    border-bottom: 1px solid #2D3250;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .wrapper .sidebar ul li a {
+    color: #2D3250;
+    display: block;
+  }
+
+  .wrapper .sidebar ul li a .fas {
+    width: 25px;
+  }
+
+  .wrapper .sidebar ul li:hover {
+    background-color: #FC7300;
+  }
+
+  .wrapper .sidebar ul li:hover a {
+    color: #fff;
+  }
+
+  .wrapper .sidebar .social_media {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+  }
+
+  .wrapper .sidebar .social_media a {
+    display: block;
+    width: 40px;
+    background: #FC7300;
+    height: 40px;
+    line-height: 45px;
+    text-align: center;
+    margin: 0 5px;
+    color: #2D3250;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+
+  .wrapper .main_content {
+    width: 100%;
+    margin-left: 200px;
+  }
+
+  .wrapper .main_content .header {
+    padding: 20px;
+    background: #fff;
+    color: #717171;
+    border-bottom: 1px solid #e0e4e8;
+  }
+
+  .wrapper .main_content .info {
+    margin: 20px;
+    color: #717171;
+    line-height: 25px;
+  }
+
+  .wrapper .main_content .info div {
+    margin-bottom: 20px;
+  }
+</style>
+
+<body>
+
+  <div class="wrapper">
+    <div class="sidebar">
+      <h2>Sidebar</h2>
+      <ul>
+        <li><a style="text-decoration: none;" id="home" href="/home1"><i class="fas fa-home"></i>Accueil</a></li>
+        <li><a style="text-decoration: none;" id="er" href="/eleve"><i class="fas fa-user"></i>Etudiant reclamer</a>
+        </li>
+        <li><a style="text-decoration: none;" id="m" href="/matier"><i class="fas fa-address-card"></i>Matieres</a></li>
+        <li><a style="text-decoration: none;" id="r" href="/r"><i class="fas fa-chart-bar"></i>Statistique</a></li>
+        <li><a style="text-decoration: none;" id="table" href="/table"><i class="fas fa-table"></i>PV</a></li>
+        <li><a style="text-decoration: none;" id="date_open" href="/date"><i class="fas fa-clock"></i>Ouvrir la
+            réclamation</a></li>
+        <li><a style="text-decoration: none;" id="date_prof" href="/date_prof"><i class="fas fa-clock"></i>Traitement des réclamation</a></li>
+      </ul>
+      <div class="social_media">
+        <li><a id="Logout" href="/log"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+      </div>
+
+    </div>
+  </div>
+  <div class="main_content">
+    <form id="t" method="GET">
+      <div class="select-container">
+        <div class="select-pair">
+
+          <label for="niveau" class="label1">Niveau: </label>
+          <select name="niveau" id="niveau" class="select1">
+            <div class="option1">
+              <option value="L1">L1</option>
+              <option value="L2">L2</option>
+              <option value="L3">L3</option>
+            </div>
+          </select>
+        </div>
+        <div class="select-pair">
+          <label for="semestre" class="label1">Semestre:</label>
+          <select name="semestre" id="semestre" class="select1">
+            <div class="option1">
+              <option value="S1">S1</option>
+              <option value="S2">S2</option>
+              <option value="S3">S3</option>
+              <option value="S4">S4</option>
+              <option value="S5">S5</option>
+              <option value="S6">S6</option>
+            </div>
+          </select>
+        </div>
+        <div class="select-pair">
+          <label for="filiere" class="label1">Filière:</label>
+          <select name="filiere" id="filiere" class="select1">
+            <div class="option1">
+              <option value="T">T</option>
+              <option value="DSI">DSI</option>
+              <option value="CNM">CNM</option>
+              <option value="RSS">RSS</option>
+            </div>
+          </select>
+
+
+        </div>
+        <div class="select-pair">
+          <label for="annee" class="label1">Sélectionnez l'année :</label>
+          <select id="annee" name="annee" class="select1"> </select>
+        </div>
+
+        <script>
+          const selectAnnee = document.getElementById('annee');
+          const anneeActuelle = new Date().getFullYear();
+
+          // Ajoute les options d'année de l'année actuelle jusqu'à 20 ans en arrière
+          for (let annee = anneeActuelle; annee >= anneeActuelle - 80; annee--) {
+            const option = document.createElement('option');
+            option.value = `${annee}-${annee + 1}`;
+            option.text = `${annee}-${annee + 1}`; // Format année académique par exemple 2023-2024
+            selectAnnee.add(option);
+          }
+        </script>
+        <div class="select-container">
+          <div class="select-pair">
+            <div class="option1">
+              <button id="a" class="b" type="submit">Soumettre</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <h2 class="chart-title" style="margin-top: 60px;">Statistiques des étudiants <%= ni%> <%= se%> <%= fi%> <%= an%></h2>
+
+    <div style="display: flex; justify-content: center;margin-top: 90px;">
+
+      <div id="chartContainer" style="margin-left: 250px;">
+        <canvas id="barChart" width="400" height="150" style="background-color: white;"></canvas>
+      </div>
+
+      <div id="decisionChartContainer" style="margin-bottom: 90;">
+        <canvas id="decisionDoughnutChart" width="400" height="150"></canvas>
+      </div>
+
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const statistiques = JSON.parse('<%- JSON.stringify(statistiques) %>');
+
+      const barChartCanvas = document.getElementById('barChart').getContext('2d');
+
+      // Génération du graphique à barres avec Chart.js
+      new Chart(barChartCanvas, {
+        type: 'bar',
+        data: {
+          labels: ['EtudiantsAvecReclamation', 'EtudiantsSansReclamation'],
+          datasets: [{
+            label: 'Étudiants',
+            data: [
+              statistiques.etudiantsAvecReclamation,
+              statistiques.etudiantsSansReclamation
+            ],
+            backgroundColor: ['#2c2e19', '#FC7300'],
+            borderColor: ['rgba(255, 99, 132, 1)', 'rgba(255, 159, 64, 1)'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              stepSize: 5,
+              color: 'black',
+              weight: 'bold',
+              fontSize: 14
+            },
+            x: {
+              color: 'black',
+              weight: 'bold',
+              fontSize: 14
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          layout: {
+            padding: {
+              left: 10,
+              right: 10,
+              top: 40, // Ajustez la valeur du haut pour l'espace du titre
+              bottom: 10
+            }
+          },
+          elements: {
+            bar: {
+              borderWidth: 2,
+            }
+          },
+          responsive: true,
+          backgroundColor: 'white',
+          title: {
+            display: true,
+            text: 'Statistiques des étudiants',
+            color: 'black',
+            weight: 'bold',
+            fontSize: 16
+          }
+        }
+      });
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      const statistiques = JSON.parse('<%- JSON.stringify(d) %>');
+
+      const doughnutChartCanvas = document.getElementById('decisionDoughnutChart').getContext('2d');
+
+      // Génération du graphique Doughnut avec Chart.js
+      new Chart(doughnutChartCanvas, {
+        type: 'doughnut',
+        data: {
+          labels: [
+            `Admis(e) (${statistiques.pourcentageAdmis.toFixed(2)}%)`,
+            `Ajourné(e) (${statistiques.pourcentageAjournes.toFixed(2)}%)`,
+            `Compasé (${statistiques.pourcentageCompases.toFixed(2)}%)`
+          ],
+          datasets: [{
+            data: [
+              statistiques.etudiantsAdmis,
+              statistiques.etudiantsAjournes,
+              statistiques.etudiantsCompases
+            ],
+            backgroundColor: ['rgba(20,167,62,1)', '#FE0000', '#F0DE36'],
+            borderColor: ['rgba(102, 204, 102, 1)', 'rgba(255, 99, 132, 1)', 'rgba(255, 205, 86, 1)'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'right',
+              labels: {
+                font: {
+                  size: 14,
+                  weight: 'bold'
+                },
+                color: 'black'
+              }
+            }
+          },
+          layout: {
+            padding: {
+              right: 50 // Ajoutez une marge à droite
+            }
+          }
+        }
+      });
+    });
+  </script>
+
+
+
+  <!-- Code pour le graphique Bar avec les mêmes données que le graphique Doughnut -->
+  <div style="display: flex; justify-content: center; margin-top: 100px;">
+
+    <div id="additionalContentContainer" style="margin-left: 300px; margin-top: -60px;">
+      <div id="chartdiv" style="margin-right: 350px;"></div>
+
+
+    </div>
+
+    <div id="decisionChartContainer" style="margin-right: 100px;">
+      <canvas id="decisionBarChart" width="600" height="300"></canvas>
+    </div>
+
+  </div>
+  <div id="statsContainer" style="margin-right: 100px; white-space: normal !important;">
+    <label style="font-weight: bold !important;">Total d'étudiants avec réclamation : <%= m.etudiantsAvecReclamation ,
+        m.reclamationsModifiees%></label>
+    <p style="font-weight: bold !important;">Nombre de réclamations modifiées : <%= m.reclamationsModifiees %>
+    </p>
+  </div>
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const statistiques = JSON.parse('<%- JSON.stringify(d) %>');
+      const barChartCanvas = document.getElementById('decisionBarChart').getContext('2d');
+
+      // Génération du graphique à barres avec Chart.js
+      new Chart(barChartCanvas, {
+        type: 'bar',
+        data: {
+          labels: ['Admis(e)', 'Ajourné(e)', 'Compasé'],
+          datasets: [{
+            data: [
+              statistiques.etudiantsAdmis,
+              statistiques.etudiantsAjournes,
+              statistiques.etudiantsCompases
+            ],
+            backgroundColor: ['rgba(20,167,62,1)', '#FE0000', '#F0DE36'],
+            borderColor: ['rgba(102, 204, 102, 1)', 'rgba(255, 99, 132, 1)', 'rgba(255, 205, 86, 1)'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              stepSize: 5,
+              color: 'white',
+              weight: 'bold',
+              fontSize: 20
+            },
+            x: {
+              color: 'white',
+              weight: 'bold',
+              fontSize: 14
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            },
+            labels: {
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            }
+          },
+          layout: {
+            padding: {
+              left: 100,
+              right: 10,
+              top: 40,
+              bottom: 50
+            }
+          },
+          elements: {
+            bar: {
+              borderWidth: 2,
+              barPercentage: 0.7
+            }
+          },
+          responsive: true,
+          backgroundColor: 'white',
+          title: {
+            display: true,
+            text: 'Statistiques des étudiants',
+            color: 'black',
+            weight: 'bold',
+            fontSize: 16
+          }
+        }
+      });
+    });
+  </script>
+
+  </section>
+
+  <script>
+    var chart = am4core.create("chartdiv", am4charts.PieChart);
+
+    // Add data
+    chart.data = [{
+      "name": "note modifier",
+      "nomber": '<%= m.reclamationsModifiees %>'
+    }, {
+      "name": "note non modifier",
+      "nomber": '<%= m.etudiantsAvecReclamation , m.reclamationsModifiees %>'
+    }];
+
+    // Add and configure Series
+    var pieSeries = chart.series.push(new am4charts.PieSeries());
+    pieSeries.dataFields.value = "nomber";
+    pieSeries.dataFields.category = "name";
+    pieSeries.dataFields.hidden = "hidden";
+
+    // Let's cut a hole in our Pie chart the size of 40% the radius
+    chart.innerRadius = am4core.percent(40);
+
+    // Disable ticks and labels
+    pieSeries.labels.template.disabled = true;
+    pieSeries.ticks.template.disabled = true;
+
+    // Disable tooltips
+    pieSeries.slices.template.tooltipText = "";
+
+    // Add a legend
+    chart.legend = new am4charts.Legend();
+    chart.legend.position = "right";
+    chart.legend.align = "left";
+    chart.legend.dx = -10; // 
+    chart.legend.labels.template.fontSize = 14;
+    chart.legend.labels.template.fontWeight = "bold";
+    var statsContainer = document.getElementById('statsContainer');
+    statsContainer.innerHTML = `
+          <p  style="font-weight: bold !important;">Nombre d'étudiants avec réclamations non modifiées :<%= m.etudiantsAvecReclamation , m.reclamationsModifiees%></p>
+          <p  style="font-weight: bold !important;">Nombre d'étudiants avec réclamations modifiées : <%= m.reclamationsModifiees %></p>
+      `;
+  </script>
+  <script>
+    // Fonction pour ajouter une option à un sélecteur
+    function addOption(selectElement, value, text) {
+      const option = document.createElement('option');
+      option.value = value;
+      option.text = text;
+      selectElement.add(option);
+    }
+
+    // Récupérer les éléments HTML du niveau, du semestre et de la filière
+    const niveauSelect = document.getElementById('niveau');
+    const semestreSelect = document.getElementById('semestre');
+    const filiereSelect = document.getElementById('filiere');
+
+    // Ajouter un gestionnaire d'événement pour détecter les changements dans le champ du niveau
+    niveauSelect.addEventListener('change', function () {
+      // Réinitialiser les options du champ du semestre
+      semestreSelect.innerHTML = '';
+
+      // Réinitialiser les options du champ de la filière
+      filiereSelect.innerHTML = '';
+
+      // Ajouter les options appropriées en fonction du niveau sélectionné
+      if (niveauSelect.value === 'L1') {
+        addOption(semestreSelect, 'S1', 'S1');
+        addOption(semestreSelect, 'S2', 'S2');
+        addOption(filiereSelect, 'T', 'T');
+      } else if (niveauSelect.value === 'L2') {
+        addOption(semestreSelect, 'S3', 'S3');
+        addOption(semestreSelect, 'S4', 'S4');
+        addOption(filiereSelect, 'DSI', 'DSI');
+        addOption(filiereSelect, 'CNM', 'CNM');
+        addOption(filiereSelect, 'RSS', 'RSS');
+      } else if (niveauSelect.value === 'L3') {
+        addOption(semestreSelect, 'S5', 'S5');
+        addOption(semestreSelect, 'S6', 'S6');
+        addOption(filiereSelect, 'DSI', 'DSI');
+        addOption(filiereSelect, 'CNM', 'CNM');
+        addOption(filiereSelect, 'RSS', 'RSS');
+      }
+    });
+
+    // Ajouter un gestionnaire d'événement pour détecter les changements dans le champ du semestre
+    semestreSelect.addEventListener('change', function () {
+      // Réinitialiser les options du champ de la filière
+      filiereSelect.innerHTML = '';
+
+      // Ajouter les options appropriées en fonction du semestre sélectionné
+      if (niveauSelect.value === 'L1' && semestreSelect.value === 'S1') {
+        addOption(filiereSelect, 'T', 'T');
+      } else if (niveauSelect.value === 'L1' && semestreSelect.value === 'S2') {
+        addOption(filiereSelect, 'DSI', 'DSI');
+        addOption(filiereSelect, 'CNM', 'CNM');
+        addOption(filiereSelect, 'RSS', 'RSS');
+      } else if (niveauSelect.value === 'L2') {
+        // Ajouter les options de filière appropriées pour L2
+        addOption(filiereSelect, 'DSI', 'DSI');
+        addOption(filiereSelect, 'CNM', 'CNM');
+        addOption(filiereSelect, 'RSS', 'RSS');
+
+      } else if (niveauSelect.value === 'L3') {
+        addOption(filiereSelect, 'DSI', 'DSI');
+        addOption(filiereSelect, 'CNM', 'CNM');
+        addOption(filiereSelect, 'RSS', 'RSS');
+        // Ajouter les options de filière appropriées pour L3
+      }
+    });
+
+    // Déclencher l'événement de changement pour mettre à jour les options initiales
+    niveauSelect.dispatchEvent(new Event('change'));
+
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#sidebarCollapse').on('click', function () {
+        $('#sidebar').toggleClass('active');
+      });
+    });
+  </script>
+  </div>
+  </div>
+  </div>
+
+</body>
+<script>
+  $(document).ready(function () {
+    var url = window.location.href;
+    if (url.endsWith('/admin')) {
+      loadContent('/reclamations');
+    }
+    // handle link clicks
+    $(document).on('click', 'a', function (event) {
+      event.preventDefault();
+      var url = $(this).attr('href');
+      loadContent(url);
+      history.pushState({ url: url }, null, url);
+    });
+
+    // handle back/forward buttons
+    window.addEventListener('popstate', function (event) {
+      if (event.state != null) {
+        loadContent(event.state.url);
+      } else {
+        loadContent('/reclamations');
+      }
+    });
+
+    // check for hash in URL
+    if (window.location.hash) {
+      var hash = window.location.hash.substring(1);
+      loadContent(hash);
+    }
+    $('#table').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/table'; // redirect the user to the logout page
+    });
+    $('#update').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/date_prof_update'; // redirect the user to the logout page
+    });
+    $('#Logout').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/log'; // redirect the user to the logout page
+    });
+    $('#r').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/r'; // redirect the user to the logout page
+    });
+    $('#er').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/eleve'; // redirect the user to the logout page
+    });
+    $('#et').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/eleve1'; // redirect the user to the logout page
+    });
+    $('#m').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/matier'; // redirect the user to the logout page
+    });
+    $('#Reclamations').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/eleve_prof'; // redirect the user to the logout page
+    });
+    $('#date_open').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/date'; // redirect the user to the logout page
+    });
+    $('#matieres').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/matierr'; // redirect the user to the logout page
+    });
+    $('#date_prof').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/date_prof'; // redirect the user to the logout page
+    });
+    $('#env').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/env_reclamation'; // redirect the user to the logout page
+    }); $('#home').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/home1'; // redirect the user to the logout page
+    });
+    $('#rec').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/reclamation'; // redirect the user to the logout page
+    });
+  });
+
+  function loadContent(url) {
+    $("#content-container").load(url);
+  }
+</script>
+<script>
+  let currentMatiereIndex = -1; // Variable pour stocker l'index de la matière en cours d'édition
+  let currentMatiereCode = ""; // Variable pour stocker le code de la matière en cours d'édition
+
+  function openModal(matricule, code, NCC, NSR, NSN, semestre, filiere, niveau, annee) {
+    console.log("Matricule:", matricule);
+    console.log("Code:", code);
+    console.log("NCC:", NCC);
+    console.log("NSR:", NSR);
+    console.log("NSN:", NSN);
+    console.log("Semestre:", semestre);
+    console.log("Filière:", filiere);
+    console.log("Niveau:", niveau);
+    document.getElementById("modal").style.display = "block";
+    document.getElementById("matricule").innerHTML = matricule;
+    document.getElementById("info-semestre").innerHTML = semestre;
+    document.getElementById("info-filiere").innerHTML = filiere;
+    document.getElementById("info-niveau").innerHTML = niveau;
+    document.getElementById("info-annee").innerHTML = annee;
+
+
+    if (NCC !== "") {
+      document.getElementById("label-ncc").style.display = "block";
+      document.getElementById("ncc").style.display = "block";
+      document.getElementById("ncc").value = NCC;
+    } else {
+      document.getElementById("label-ncc").style.display = "none";
+      document.getElementById("ncc").style.display = "none";
+    }
+
+    if (NSR !== "") {
+      document.getElementById("label-nsr").style.display = "block";
+      document.getElementById("nsr").style.display = "block";
+      document.getElementById("nsr").value = NSR;
+    } else {
+      document.getElementById("label-nsr").style.display = "none";
+      document.getElementById("nsr").style.display = "none";
+    }
+
+    if (NSN !== "") {
+      document.getElementById("label-nsn").style.display = "block";
+      document.getElementById("nsn").style.display = "block";
+      document.getElementById("nsn").value = NSN;
+    } else {
+      document.getElementById("label-nsn").style.display = "none";
+      document.getElementById("nsn").style.display = "none";
+    }
+
+    currentMatiereCode = code;
+
+    // Stocker l'index de la matière en cours d'édition
+    const donneeIndex = data.findIndex(donnee => donnee.matricule === matricule);
+    currentMatiereIndex = donneeIndex >= 0 ? donneeIndex : -1;
+    currentMatiereCode = currentMatiereIndex >= 0 ? data[currentMatiereIndex].reclamations[currentMatiereIndex].code : "";
+  }
+
+
+  function closeModal() {
+    const modal = document.getElementById("modal");
+    modal.style.display = "none";
+  }
+
+  function showConfirmationModal() {
+    const confirmationModal = document.getElementById("confirmationModal");
+    confirmationModal.style.display = "block";
+  }
+
+  function closeConfirmationModal() {
+    const confirmationModal = document.getElementById("confirmationModal");
+    if (confirmationModal && confirmationModal.style.display !== "none") {
+      confirmationModal.style.display = "none";
+    }
+  }
+
+  function SubmitForm() {
+    const matricule = document.getElementById("matricule").innerText;
+    const semestre = document.getElementById("info-semestre").innerText;
+    const filiere = document.getElementById("info-filiere").innerText;
+
+
+    const niveau = document.getElementById("info-niveau").innerText;
+    const annee = document.getElementById("info-annee").innerText;
+
+
+    const nccValue = document.getElementById("ncc").value;
+    const nsrValue = document.getElementById("nsr").value;
+    const nsnValue = document.getElementById("nsn").value;
+    const repondreValue = document.getElementById("reponse").value;
+
+    // Créer un objet contenant les données à envoyer
+    const formData = {
+      matricule: matricule,
+      code: currentMatiereCode,
+      annee: annee,
+      ncc: nccValue,
+      nsr: nsrValue,
+      nsn: nsnValue,
+      semestre: semestre,
+      filiere: filiere,
+      niveau: niveau,
+      reponse: repondreValue,
+    };
+    showConfirmationModal();
+  };      // Récupérer les valeurs des champs
+
+  function confirmSubmitForm() {
+    const matricule = document.getElementById("matricule").innerText;
+    const semestre = document.getElementById("info-semestre").innerText;
+    const filiere = document.getElementById("info-filiere").innerText;
+
+
+    const niveau = document.getElementById("info-niveau").innerText;
+    const annee = document.getElementById("info-annee").innerText;
+
+
+    const nccValue = document.getElementById("ncc").value;
+    const nsrValue = document.getElementById("nsr").value;
+    const nsnValue = document.getElementById("nsn").value;
+    const repondreValue = document.getElementById("reponse").value;
+
+    // Créer un objet contenant les données à envoyer
+    const formData = {
+      matricule: matricule,
+      code: currentMatiereCode,
+      annee: annee,
+      ncc: nccValue,
+      nsr: nsrValue,
+      nsn: nsnValue,
+      semestre: semestre,
+      filiere: filiere,
+      niveau: niveau,
+      reponse: repondreValue,
+    };
+
+    closeConfirmationModal();
+    closeModal();
+    fetch('/modifier_reclamation', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+      .then(response => response.text())
+      .then(data => {
+        console.log(data); // Afficher la réponse du serveur
+        closeConfirmationModal(); // Fermer le modal principal après la modification
+
+        // Mettre à jour les données dans le tableau data
+        if (currentMatiereIndex >= 0) {
+          data[currentMatiereIndex].reclamations[currentMatiereIndex].NCC = formData.ncc;
+          data[currentMatiereIndex].reclamations[currentMatiereIndex].NSR = formData.nsr;
+          data[currentMatiereIndex].reclamations[currentMatiereIndex].NSN = formData.nsn;
+          data[currentMatiereIndex].reclamations[currentMatiereIndex].reponse = formData.reponse;
+        }
+
+        // Afficher l'alerte avec le message personnalisé
+        showAlert('Les données ont été enregistrées avec succès.', 'success');
+      })
+      .catch(error => {
+        console.error('Erreur lors de la modification de la réclamation:', error);
+      })
+      .finally(() => {
+        closeConfirmationModal(); // Fermer le modal de confirmation
+      });
+
+  }
+
+
+  // Afficher le modal de confirmation
+
+
+  // Effectuer la requête AJAX vers la route de modification
+
+  function showAlert(message, type) {
+    const alertElement = document.createElement('div');
+    alertElement.classList.add('alert');
+    alertElement.classList.add(`alert-${type}`);
+    alertElement.textContent = message;
+
+    const closeButton = document.createElement('a');
+    closeButton.classList.add('alert-close');
+    closeButton.innerHTML = '&times;';
+    closeButton.href = '#';
+    closeButton.addEventListener('click', function () {
+      this.parentElement.remove();
+    });
+
+    alertElement.appendChild(closeButton);
+
+    document.body.appendChild(alertElement);
+  }
+
+
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Code</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <!-- Add new CSS styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f6f5f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+            /* Ajustez la largeur maximale selon vos besoins */
+            min-height: 400px;
+            margin: 0 auto;
+            /* Centre le conteneur horizontalement */
+        }
+
+        .form-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 20px;
+            height: 100%;
+            text-align: center;
+        }
+
+        h2 {
+            font-weight: bold;
+            margin: 0;
+        }
+
+        input {
+            background-color: #eee;
+            border: none;
+            padding: 10px 15px;
+            /* Ajustez la taille du padding selon vos besoins */
+            margin: 8px 0;
+            width: 100%;
+        }
+
+        button {
+            border-radius: 20px;
+            border: 1px solid #FC7300;
+            background-color: #FC7300;
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 10px 20px;
+            /* Ajustez la taille du padding selon vos besoins */
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        button.ghost {
+            background-color: transparent;
+            border-color: #FFFFFF;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="container">
+        <div class="form-container sign-in-container">
+            <form method="post" action="/verify_code_registre">
+                <h2>Verification Code</h2>
+                <div class="form-group">
+
+                    <input type="text" id="enteredCode" name="enteredCode" class="form-control" required>
+                </div>
+                <button type="submit">Verifie Code</button>
+            </form>
+        </div>
+    </div>
+    <!-- Add Bootstrap JS and Popper.js scripts -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <% if (typeof eror !=='undefined' && eror !=='' ) { %>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    icon: 'eror',
+                    title: 'Error',
+                    text: '<%= eror %>',
+                    confirmButtonColor: '#d33', // Couleur du bouton de confirmation (rouge)
+                    background: '#f4f4f4' // Couleur de fond de l'alerte
+                });
+            });
+        </script>
+        <% } %>
+
+
+
+
+            <% if (typeof Success !=='undefined' && Success !=='' ) { %>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Succès',
+                            text: '<%= Success %>',
+                            confirmButtonColor: '#28a745', // Couleur du bouton de confirmation (vert)
+                            background: '#f4f4f4' // Couleur de fond de l'alerte
+                        });
+                    });
+                </script>
+                <% } %>
+
+</html>

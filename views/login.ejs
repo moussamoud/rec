@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+  <!-- Add new CSS styles -->
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f6f5f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-family: 'Montserrat', sans-serif;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      max-width: 360px;
+      /* Ajustez la largeur maximale selon vos besoins */
+
+      margin: 0 auto;
+
+      /* Centre le conteneur horizontalement */
+    }
+
+
+    #form-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 0 20px;
+      height: 100%;
+      text-align: center;
+    }
+
+    #form-container-log {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 20px;
+      height: 100%;
+      text-align: center;
+      margin: auto;
+      /* Ajoutez cette ligne pour centrer horizontalement */
+      min-height: 300px;
+      /* Ajustez la hauteur minimale selon vos besoins */
+      margin-bottom: 20px;
+      /* Ajoutez une marge en bas pour séparer les formulaires */
+    }
+
+    h1 {
+      font-weight: bold;
+      margin: 0;
+    }
+
+    h8 {
+      font-weight: bold;
+
+    }
+
+    input {
+      background-color: #eee;
+      border: none;
+      padding: 10px 15px;
+      /* Ajustez la taille du padding selon vos besoins */
+      margin: 8px 0;
+      width: 100%;
+    }
+
+    button {
+      border-radius: 20px;
+      border: 1px solid #FC7300;
+      background-color: #FC7300;
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 10px 20px;
+      /* Ajustez la taille du padding selon vos besoins */
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: transform 80ms ease-in;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    button:focus {
+      outline: none;
+    }
+
+    button.ghost {
+      background-color: transparent;
+      border-color: #FFFFFF;
+    }
+  </style>
+
+  <div class="container" id="container">
+
+    <div id="form-container-log" class="login-form">
+      <form class="form-signin" action="/login" method="post">
+        <br>
+        <h1>Se connecter</h1>
+
+        <input id="login-username" type="email" name="email" placeholder="Email" />
+        <input id="login-password" type="password" name="password" placeholder="Mot de passe" />
+        <a href="/forgot-password" style="color: #000000;">
+          <h8>Mot de passe oublié ?</h8>
+        </a>
+        <a href="#" onclick="showSignupForm()" style="color: #FC7300;">
+          <h8>S'inscrire ?</h8>
+        </a>
+        <button  onclick="login()">Se connecter</button>
+      </form>
+    </div>
+    <div id="form-container" class="signup-form">
+      <form class="form-signin" action="/registre" method="post">
+        <br>
+        <h1>Créer un compte</h1>
+
+        <input id="signup-username" name="nom" type="text" placeholder="Nom" />
+        <input id="signup-email" name="email" type="email" placeholder="Email" />
+        <input id="signup-password" name="password" type="password" placeholder="Mot de passe" />
+        <input id="signup-cpassword" name="cpassword" type="password" placeholder="Confirmation du mot de passe" />
+        <button onclick="signup()">S'inscrire</button><br>
+        <p class="mb-0">Vous avez déjà un compte? <a href="#" onclick="showLoginForm()" style="color: #FC7300;">
+            <h8>Login</h8>
+          </a></p>
+        <br>
+      </form>
+    </div>
+  </div>
+  <% if (typeof Success !=='undefined' && Success !=='' ) { %>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        Swal.fire({
+          icon: 'success',
+          title: 'Succès',
+          text: '<%= Success %>',
+          confirmButtonColor: '#28a745', // Couleur du bouton de confirmation (vert)
+          background: '#f4f4f4' // Couleur de fond de l'alerte
+        });
+      });
+    </script>
+    <% } %>
+
+      <% if (typeof Eror !=='undefined' && Eror !=='' ) { %>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+          document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+              icon: 'error',
+              title: 'Erreur',
+              text: '<%= Eror %>',
+              confirmButtonColor: '#d33', // Couleur du bouton de confirmation (rouge)
+              background: '#f4f4f4' // Couleur de fond de l'alerte
+            });
+          });
+        </script>
+        <% } %>
+          <!-- Vos scripts JS ici -->
+
+          <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+          <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+          <script src="scripts.js"></script>
+
+          <script>
+            function showSignupForm() {
+              document.querySelector('.signup-form').style.display = 'block';
+              document.querySelector('.login-form').style.display = 'none';
+            }
+
+            function showLoginForm() {
+              document.querySelector('.signup-form').style.display = 'none';
+              document.querySelector('.login-form').style.display = 'block';
+            }
+
+            function login() {
+              var username = document.getElementById('login-username').value;
+              var password = document.getElementById('login-password').value;
+              console.log('Username:', username);
+              console.log('Password:', password);
+              // Ajoutez ici la logique de connexion
+            }
+
+            function signup() {
+              var username = document.getElementById('signup-username').value;
+              var email = document.getElementById('signup-email').value;
+              var password = document.getElementById('signup-password').value;
+              var cpassword = document.getElementById('signup-cpassword').value;
+
+              console.log('Username:', username);
+              console.log('Email:', email);
+              console.log('Password:', password);
+              console.log('Confirm Password:', cpassword);
+              // Ajoutez ici la logique d'inscription
+            }
+
+            // Afficher le formulaire d'inscription par défaut
+            showLoginForm();
+          </script>
+
+
+</body>
+
+</html>

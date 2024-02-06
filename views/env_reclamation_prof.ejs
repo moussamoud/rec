@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<!-- Coding by CodingLab | www.codinglabweb.com -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!----======== CSS ======== -->
+
+  <!----===== Boxicons CSS ===== -->
+  <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700">
+  <style>
+    .hhhhh{
+      border-radius: 50%;
+      height: 80px;
+      width: 80px;
+      margin-left: -20px;
+    }
+    .icon {
+      color: #131212;
+      /* font-weight: bold; */
+      transition: all 0.3s ease;
+      font-size: 15px;
+      margin-right: 15px;
+    }
+
+    .button:hover .icon {
+      color: #fff;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      background-color: #fff;
+      cursor: pointer;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      margin-left: 25em;
+      /* position: fixed; */
+      color: #131212;
+      font-size: 17px;
+      font-weight: bold;
+      white-space: nowrap;
+      opacity: 1;
+      text-decoration: none;
+    }
+
+    .button:hover {
+      background-color: #695CFE;
+      /* transform: translateY(-2px); */
+      box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+      color: #fff;
+    }
+
+    #canvas-holder {
+      width: 100%;
+      margin-top: 50px;
+      text-align: center;
+    }
+
+    #chartjs-tooltip {
+      opacity: 1;
+      position: absolute;
+      background: rgba(0, 0, 0, .7);
+      color: white;
+      border-radius: 3px;
+      -webkit-transition: all .1s ease;
+      transition: all .1s ease;
+      pointer-events: none;
+      -webkit-transform: translate(-50%, 0);
+      transform: translate(-50%, 0);
+      color: rgba(0, 0, 0, 0.192);
+    }
+
+    .chartjs-tooltip-key {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 10px;
+    }
+
+    /* Google Font Import - Poppins */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    :root {
+      /* ===== Colors ===== */
+      --body-color: #E4E9F7;
+      --sidebar-color: #FFF;
+      --primary-color: #695CFE;
+      --primary-color-light: #F6F5FF;
+      --toggle-color: #DDD;
+      --text-color: #131212;
+
+      /* ====== Transition ====== */
+      --tran-03: all 0.2s ease;
+      --tran-03: all 0.3s ease;
+      --tran-04: all 0.3s ease;
+      --tran-05: all 0.3s ease;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--body-color);
+
+      transition: var(--tran-05);
+    }
+
+    ::selection {
+      /* background-color: var(--primary-color); */
+      color: #fff;
+    }
+
+    body.dark {
+      --body-color: #18191a;
+      --sidebar-color: #242526;
+      --primary-color: #3a3b3c;
+      --primary-color-light: #3a3b3c;
+      --toggle-color: #fff;
+      --text-color: #ccc;
+    }
+
+    /* ===== sidebarr ===== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 250px;
+      padding: 10px 14px;
+      background: var(--sidebar-color);
+      transition: var(--tran-05);
+      z-index: 100;
+    }
+
+    .sidebar.close {
+      width: 88px;
+    }
+
+    /* ===== Reusable code - Here ===== */
+    .sidebar li {
+      height: 50px;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .sidebar header .image,
+    .sidebar .icon {
+      min-width: 60px;
+      border-radius: 6px;
+    }
+
+    .sidebar .icon {
+      min-width: 60px;
+      border-radius: 6px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .sidebar .text,
+    .sidebar .icon {
+      color: var(--text-color);
+      font-weight: bold;
+      transition: var(--tran-03);
+    }
+
+    .sidebar .text {
+      font-size: 17px;
+      font-weight: bold;
+      white-space: nowrap;
+      opacity: 1;
+    }
+
+    .sidebar.close .text {
+      opacity: 0;
+    }
+
+    /* =========================== */
+
+    .sidebar header {
+      position: relative;
+    }
+
+    .sidebar header .image-text {
+      display: flex;
+      align-items: center;
+    }
+
+    .sidebar header .logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    header .image-text .name {
+      margin-top: 2px;
+      margin-left: 50px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    header .image-text .profession {
+      font-size: 16px;
+      margin-top: -2px;
+      display: block;
+    }
+
+    .sidebar header .image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sidebar header .image img {
+      width: 40px;
+      border-radius: 6px;
+    }
+
+    .sidebar header .toggle {
+      position: absolute;
+      top: 50%;
+      right: -25px;
+      transform: translateY(-50%) rotate(180deg);
+      height: 25px;
+      width: 25px;
+      background-color: var(--primary-color);
+      color: var(--sidebar-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      font-size: 22px;
+      cursor: pointer;
+      transition: var(--tran-05);
+      justify-content: space-between;
+      align-content: stretch;
+      flex-direction: column-reverse;
+    }
+
+    body.dark .sidebar header .toggle {
+      color: var(--text-color);
+    }
+
+    .sidebar.close .toggle {
+      transform: translateY(-50%) rotate(0deg);
+    }
+
+    .sidebar .menu {
+      margin-top: 40px;
+    }
+
+    .sidebar li.search-box {
+      border-radius: 6px;
+      background-color: var(--primary-color-light);
+      cursor: pointer;
+      transition: var(--tran-05);
+    }
+
+    .sidebar li.search-box input {
+      height: 100%;
+      width: 100%;
+      outline: none;
+      border: none;
+      background-color: var(--primary-color-light);
+      color: var(--text-color);
+      border-radius: 6px;
+      font-size: 17px;
+      font-weight: 500;
+      transition: var(--tran-05);
+    }
+
+    .sidebar li a {
+      list-style: none;
+      height: 100%;
+      background-color: transparent;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: var(--tran-03);
+    }
+
+    .sidebar li a:hover {
+      background-color: var(--primary-color);
+    }
+
+    .sidebar li a:hover .icon,
+    .sidebar li a:hover .text {
+      color: var(--sidebar-color);
+    }
+
+    body.dark .sidebar li a:hover .icon,
+    body.dark .sidebar li a:hover .text {
+      color: var(--text-color);
+    }
+
+    .sidebar .menu-bar {
+      height: calc(95% - 55px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: scroll;
+    }
+
+    .menu-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .sidebar .menu-bar .mode {
+      border-radius: 6px;
+      background-color: var(--primary-color-light);
+      position: relative;
+      transition: var(--tran-05);
+    }
+
+    .menu-bar .mode .sun-moon {
+      height: 50px;
+      width: 60px;
+    }
+
+    .mode .sun-moon i {
+      position: absolute;
+    }
+
+    .mode .sun-moon i.sun {
+      opacity: 0;
+    }
+
+    body.dark .mode .sun-moon i.sun {
+      opacity: 1;
+    }
+
+    body.dark .mode .sun-moon i.moon {
+      opacity: 0;
+    }
+
+    .menu-bar .bottom-content .toggle-switch {
+      position: absolute;
+      right: 0;
+      height: 100%;
+      min-width: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .toggle-switch .switch {
+      position: relative;
+      height: 22px;
+      width: 40px;
+      border-radius: 25px;
+      background-color: var(--toggle-color);
+      transition: var(--tran-05);
+    }
+
+    .switch::before {
+      content: '';
+      position: absolute;
+      height: 15px;
+      width: 15px;
+      border-radius: 50%;
+      top: 50%;
+      left: 5px;
+      transform: translateY(-50%);
+      background-color: var(--sidebar-color);
+      transition: var(--tran-04);
+    }
+
+    body.dark .switch::before {
+      left: 20px;
+    }
+
+    .home {
+      padding: 20px;
+      position: absolute;
+      top: 0;
+      top: 0;
+      left: 250px;
+      height: auto;
+      width: calc(100% - 250px);
+      background-color: var(--body-color);
+      background-size: auto;
+      transition: var(--tran-05);
+    }
+
+    .home .text {
+      font-size: 30px;
+      font-weight: 500;
+      color: var(--text-color);
+      padding: 12px 60px;
+    }
+
+    .sidebar.close~.home {
+      left: 78px;
+      height: 100vh;
+      width: calc(100% - 78px);
+    }
+
+    body.dark .home .text {
+      color: var(--text-color);
+    }
+
+    html {
+      box-sizing: border-box;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    *,
+    *:before,
+    *:after {
+      box-sizing: inherit;
+    }
+
+
+
+    @media (min-width: 900px) {
+      .background {
+        padding: 0 0 10px;
+      }
+    }
+
+    .container {
+margin: 0 auto;
+padding: 5px 0 0;
+max-width: 960px;
+width: 100%;
+}
+
+.panel {
+background-color: #fff;
+border-radius: 10px;
+position: relative;
+width: 100%;
+z-index: 10;
+}
+
+.pricing-table {
+box-shadow: 0px 10px 13px -6px rgba(0, 0, 0, 0.08), 0px 20px 31px 3px rgba(0, 0, 0, 0.09), 0px 8px 20px 7px rgba(0, 0, 0, 0.02);
+display: flex;
+flex-direction: column;
+}
+
+@media (min-width: 900px) {
+.pricing-table {
+  flex-direction: row;
+}
+}
+
+.pricing-table * {
+text-align: center;
+text-transform: uppercase;
+}
+
+.pricing-plan {
+border-bottom: 1px solid #e1f1ff;
+
+}
+
+.pricing-plan:last-child {
+border-bottom: none;
+}
+
+@media (min-width: 900px) {
+.pricing-plan {
+  border-bottom: none;
+  border-right: 1px solid #e1f1ff;
+  flex-basis: 100%;
+  padding: 20px 50px;
+}
+
+.pricing-plan:last-child {
+  border-right: none;
+}
+}
+
+.pricing-img {
+margin-bottom: 25px;
+max-width: 100%;
+}
+
+.pricing-header {
+color: #888;
+font-weight: 600;
+letter-spacing: px;
+}
+
+.pricing-features {
+color: #016FF9;
+font-weight: 600;
+letter-spacing: 1px;
+margin: 10px 0 0px;
+}
+
+.pricing-features-item {
+border-top: 1px solid #e1f1ff;
+font-size: 20px;
+line-height: 1.5;
+
+}
+
+.pricing-features-item:last-child {
+border-bottom: 1px solid #e1f1ff;
+}
+
+.pricing-price {
+color: #016FF9;
+display: block;
+font-size: 32px;
+font-weight: 700;
+}
+.pricing-button {
+border: 1px solid #9dd1ff;
+border-radius: 10px;
+color: #348EFE;
+display: inline-block;
+padding: 15px 10px;
+text-decoration: none;
+transition: all 150ms ease-in-out;
+}
+
+.pricing-button:hover,
+.pricing-button:focus {
+background-color: #e1f1ff;
+}
+
+.pricing-button.is-featured {
+background-color: #48aaff;
+color: #fff;
+}
+
+.pricing-button.is-featured:hover,
+.pricing-button.is-featured:active {
+background-color: #269aff;
+}
+</style>
+</head>
+
+<body>
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <img src="https://i.pinimg.com/564x/2a/66/26/2a66265f36501b5385e0ce642803faee.jpg" class="hhhhh"
+                    id="hhhhh">
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+
+                <li class="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="text" placeholder="Search...">
+                </li>
+
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="#" id="home">
+                            <i class='bx bx-home icon'></i>
+                            <span class="text nav-text">homme</span>
+                        </a>
+                    </li>
+
+
+
+                    <li class="nav-link">
+                        <a href="/eleve ">
+                            <i class='bx bxs-user icon'></i>
+                            <span class="text nav-text">les eleves</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href=" " id="env_reclamation">
+                            <i class='bx bx-send icon'></i>
+                            <span class="text nav-text">envoie recla...</span>
+                        </a>
+                    </li>
+
+
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li class="">
+                    <a href="/log">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text nav-text">Logout</span>
+                    </a>
+                </li>
+
+                <li class="mode">
+                    <div class="sun-moon">
+                        <i class='bx bx-moon icon moon'></i>
+                        <i class='bx bx-sun icon sun'></i>
+                    </div>
+                    <span class="mode-text text">Dark mode</span>
+
+                    <div class="toggle-switch">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+
+            </div>
+        </div>
+
+    </nav>
+
+
+<section class="home">
+<% if (reclamation=="open") { %>
+  <h2 class="button">date limite :<%= dd %></h2>
+<br>
+<a class="button" id="myLink" href="#"><div></i>export reclamation</div></a><a class="button" href="add_std.html"><div><i class='bx bx-plus-medical icon'></i>AJOUTER</div></a>
+</pre>
+<div class="background">
+<div class="container">
+  <div class="panel pricing-table">
+
+    <div class="pricing-plan">
+      <h2 class="pricing-header">matricule</h2>
+    </div>
+
+   
+    <div class="pricing-plan">
+      <h2 class="pricing-header">modifier</h2>
+    </div>
+    <div class="pricing-plan">
+
+      <h2 class="pricing-header">suprimer</h2>
+
+
+    </div>
+    <div class="pricing-plan">
+
+      <h2 class="pricing-header">reclamation</h2>
+
+
+    </div>
+  </div>
+</div>
+</div>
+<% users.forEach(function(mat) { %>
+<div class="background">
+  <div class="container">
+    <div class="panel pricing-table">
+
+      <div class="pricing-plan">
+
+        <ul class="pricing-features">
+          <li class="pricing-features-item">
+            <%= mat.Matricule%>
+          </li>
+
+        </ul>
+      </div>
+
+      <div class="pricing-plan">
+
+
+        <ul class="pricing-features">
+          <a href="open_edit_std/<%=mat.Matricule%>"  class="pricing-button">modifier</a>
+        </ul>
+
+      </div>
+      <div class="pricing-plan">
+
+
+        <ul class="pricing-features">
+         <a href="delete_std/<%=mat.Matricule%>"  class="pricing-button">suprimer</a>
+        </ul>
+
+      </div>
+      <div class="pricing-plan">
+
+
+        <ul class="pricing-features">
+         <a href="s_reclamation/?mat=<%=mat.Matricule%>" class="pricing-button">reclamation</a>
+        </ul>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+<% }); %>
+  </div>
+  <% } %>  
+<% if (reclamation=="close") { %>
+<h1>le reclamation ne pas encore ouverte</h1>
+<% } %>
+<% if (reclamation=="termine") { %>
+  <h1>le reclamation est terminee</h1>
+  <% } %>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script>
+const body = document.querySelector('body'),
+sidebar = body.querySelector('nav'),
+toggle = body.querySelector(".toggle"),
+searchBtn = body.querySelector(".search-box"),
+modeSwitch = body.querySelector(".toggle-switch"),
+modeText = body.querySelector(".mode-text");
+
+var i = 1;
+console.log(i);
+
+toggle.addEventListener("click", () => {
+sidebar.classList.toggle("close");
+if (i % 2 == 1) {
+
+  const element1 = document.getElementById('hhhhh');
+  element1.style.marginLeft = '50px';
+  console.log(i);
+} else {
+
+  const element1 = document.getElementById('hhhhh');
+  element1.style.marginLeft = '-20px';
+  console.log(i);
+}
+i = i + 1;
+console.log(i);
+});
+
+searchBtn.addEventListener("click", () => {
+sidebar.classList.remove("close");
+
+})
+
+modeSwitch.addEventListener("click", () => {
+body.classList.toggle("dark");
+
+if (body.classList.contains("dark")) {
+  modeText.innerText = "Light mode";
+} else {
+  modeText.innerText = "Dark mode";
+
+}
+});
+</script>
+<script>
+var myLink = document.getElementById("myLink");
+myLink.onclick = function () {
+const currentUrl = window.location.href;
+const newUrl = currentUrl.replace('/eleve', '/reclamationn');
+window.location.href = newUrl;
+return false;
+};
+</script>
+
+</body>
+
+</html>

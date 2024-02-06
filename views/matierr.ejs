@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      list-style: none;
+      text-decoration: none;
+      font-family: 'Josefin Sans', sans-serif;
+    }
+
+    body {
+      background-color: #f3f5f9;
+    }
+
+    .wrapper {
+      display: flex;
+      position: relative;
+    }
+
+    .wrapper .sidebar {
+      width: 200px;
+      height: 100%;
+      background: #fbfbfd;
+      padding: 30px 0px;
+      position: fixed;
+    }
+    .sidebar-item {
+    border-bottom: 1px solid #ddd; /* Bordure basse entre les éléments */
+   /* Ajoutez un peu d'espace autour des éléments */
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s;
+    
+   
+    font-family: 'Arial', sans-serif;
+    color :#2D3250
+  }
+    .wrapper .sidebar h2 {
+      color: #fff;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .wrapper .sidebar ul li {
+      padding: 15px;
+      border-bottom: 1px solid #2D3250;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .wrapper .sidebar ul li a {
+      color: #2D3250;
+      display: block;
+    }
+
+    .wrapper .sidebar ul li a .fas {
+      width: 25px;
+    }
+
+    .wrapper .sidebar ul li:hover {
+      background-color: #FC7300;
+    }
+
+    .wrapper .sidebar ul li:hover a {
+      color: #fff;
+    }
+
+    .wrapper .sidebar .social_media {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+    }
+
+    .wrapper .sidebar .social_media a {
+      display: block;
+      width: 40px;
+      background: #FC7300;
+      height: 40px;
+      line-height: 45px;
+      text-align: center;
+      margin: 0 5px;
+      color: #2D3250;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+    }
+
+    .wrapper .main_content {
+      width: 100%;
+      margin-left: 200px;
+    }
+
+    .wrapper .main_content .header {
+      padding: 20px;
+      background: #fff;
+      color: #717171;
+      border-bottom: 1px solid #e0e4e8;
+    }
+
+    .wrapper .main_content .info {
+      margin: 20px;
+      color: #717171;
+      line-height: 25px;
+    }
+
+    .wrapper .main_content .info div {
+      margin-bottom: 20px;
+    }
+  </style>
+  <style>
+    /* Styles pour le modal */
+    .alert {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 90%;
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+      border-radius: 12px;
+      z-index: 9999;
+    }
+
+    /* Styles pour simuler un bouton avec une couleur verte */
+    .button-like {
+      display: inline-block;
+      padding: 6px 12px;
+      background-color: rgb(105, 52, 66);
+      color: white;
+      border: none;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    .button-like:hover {
+      background-color: rgb(105, 52, 66);
+    }
+
+    .alert-success {
+      background-color: #2D3250;
+      color: #fff;
+      border: 1px solid #c3e6cb;
+    }
+
+    .alert-info {
+      background-color: #d1ecf1;
+      color: #2D3250;
+      border: 1px solid #bee5eb;
+    }
+
+    .alert-warning {
+      background-color: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+    }
+
+    .alert-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .alert-close {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      color: #af1515;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 60%;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .modal-body input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .modal-body input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .modal-footer button {
+      background-color: #2D4356;
+      color: white;
+      padding: 10px 20px;
+      margin-left: 10px;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+    }
+
+    .modal-close {
+      cursor: pointer;
+    }
+
+    .modal-body {
+      margin-bottom: 10px;
+    }
+
+    .modal-footer {
+      text-align: right;
+    }
+
+    .modal-footer button {
+      padding: 10px 20px;
+    }
+
+    table.center {
+      margin: 0 auto; /* Ajoutez cette ligne pour centrer la table horizontalement */
+    }
+    
+    /* Ajoutez ces styles pour ajuster l'apparence de la table */
+    table.center {
+      width: 80%;
+      border-collapse: collapse;
+      margin: 20px auto; /* Ajustez la marge selon vos besoins */
+    }
+    
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ccc;
+    }
+    
+    th {
+      background-color: #2D3250;
+      color: #fff;
+    }
+    
+
+    h1 {
+      color: #FC7300;
+      text-align: center;
+      margin-bottom: 10px;
+      margin-top: 30px;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    h2 {
+      color: #FC7300;
+      margin-top: 10px;
+    }
+
+    h5 {
+      color: #2D3250;
+      font-size: 18px; /* Choisissez la taille de police qui vous convient */
+      line-height: 1.5; 
+      font-family: 'Arial', sans-serif;
+      font-weight: bold;
+  
+
+    }
+  </style>
+  <style>
+    :root {
+
+      --secondary: #ff5252;
+    }
+
+
+    /* Core styles/functionality */
+    .tab input {
+      position: absolute;
+      opacity: 0;
+      z-index: -1;
+    }
+
+    .tab__content {
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.35s;
+    }
+
+    .tab input:checked~.tab__content {
+      max-height: 100rem;
+    }
+
+    .tab__label,
+    .tab__close {
+      display: flex;
+      cursor: pointer;
+    }
+
+    .tab__label {
+      justify-content: space-between;
+      padding: 1rem;
+      color: #FC7300;
+      font-size: 18px; /* Choisissez la taille de police qui vous convient */
+      line-height: 1.5; 
+      font-family: 'Arial', sans-serif;
+      font-weight: bold;
+    }
+
+    .tab__label::after {
+      content: "\276F";
+      width: 1em;
+      height: 1em;
+      text-align: center;
+      transform: rotate(90deg);
+      transition: all 0.35s;
+    }
+
+    .tab input:checked+.tab__label::after {
+      transform: rotate(270deg);
+    }
+
+    .tab__content p {
+      margin: 0;
+      padding: 1rem;
+    }
+
+    .tab__close {
+      justify-content: flex-end;
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+    }
+
+    .accordion--radio {
+      --theme: var(--secondary);
+    }
+
+    /* Arrow animation */
+    .tab input:not(:checked)+.tab__label:hover::after {
+      animation: bounce .5s infinite;
+    }
+
+    @keyframes bounce {
+      25% {
+        transform: rotate(90deg) translate(.25rem);
+      }
+
+      75% {
+        transform: rotate(90deg) translate(-.25rem);
+      }
+    }
+
+    /* Define font family and size for the whole document */
+    /* Define font family and size for the whole document */
+    html {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 16px;
+    }
+
+    /* Set a background color */
+    body {
+      background-color: #f2f2f2;
+    }
+
+    /* Define the sidebar */
+    .my-own-container .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 220px;
+      background-color: #fcfcfc;
+      z-index: 1000;
+      /* Set a high z-index */
+    }
+
+    .my-own-container .navbar-brand {
+      background-image: url('./Capture\ d’écran\ 2023-04-09\ 033300.png');
+      background-repeat: no-repeat;
+      background-size: contain;
+      width: 190px;
+      /* set the width of your image */
+      height: 50px;
+      /* set the height of your image */
+      display: block;
+      /* make the link a block element */
+      text-indent: -9999px;
+      /* hide the link text */
+      margin-top: 50px;
+      margin-left: 16px;
+    }
+
+
+    /* Style the navigation */
+    .my-own-container .my-nav {
+      margin-top: 60px;
+      text-align: center;
+    }
+
+    .my-own-container .my-nav ul {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+
+    .my-own-container .my-nav li {
+      margin-bottom: 15px;
+    }
+
+    .my-own-container .my-nav a {
+      display: block;
+      padding: 10px;
+      color: #305673;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .my-own-container .my-nav a:hover {
+      background-color: #A76F6F;
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .my-own-container .my-nav .active a {
+      background-color: #525151;
+    }
+
+
+    /* Define the main content area */
+    .my-own-container .main {
+      display: flex;
+    }
+
+    .my-own-container #content-container {
+      position: absolute;
+      top: 0;
+      left: 250px;
+      /* Set the left position to the width of the sidebar */
+      right: 0;
+      bottom: 0;
+      padding: 20px;
+      overflow-y: auto;
+      /* Add vertical scroll if necessary */
+    }
+
+    
+
+
+
+    /* css ouverture reclamation */
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 18px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 5px;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .btn-reclamation {
+      background-color: #305673;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-reclamation:hover {
+      background-color: #305673;
+    }
+
+    .btn-reclamation11 {
+      background-color: #A76F6F;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-reclamation11:hover {
+      background-color: #a71d2a;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <div class="sidebar">
+
+      <h2>Sidebar</h2>
+      <ul>
+
+        <li class="sidebar-item"><a style="text-decoration: none;" id="home" href="#"><i class="fas fa-home"></i>Accueil</a></li>
+        <li class="sidebar-item"><a style="text-decoration: none;" id="matierr" ><i class="fas fa-address-card"></i>Matieres</a></li>
+        <li class="sidebar-item"><a style="text-decoration: none;" id="env_reclamation" href="#"><i class="fas fa-table"></i>Envoie
+            reclamation</a></li>
+        <li class="sidebar-item"><a style="text-decoration: none;" id="reclamation" href="#"><i class="fas fa-user"></i>Voir
+            reclamation</a></li>
+
+      </ul>
+      <div class="social_media">
+        <li><a id="Logout" href="/log"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+      </div>
+
+    </div>
+    <div class="main_content">
+      <div id="content-container">
+        <section class="home">
+          <h1>MES NOTES</h1>
+          <br><br><br><br>
+
+          <section class="accordion accordion--radio">
+            <div class="tab">
+              <input type="radio" name="accordion-2" id="rd3">
+              <label for="rd3" class="tab__close">Close open tab &times;</label>
+            </div>
+            <% data.forEach(donnee=> { %>
+              <div class="tab">
+                <input type="radio" name="accordion-2" id="<%=donnee.semestre%>">
+                <label for="<%=donnee.semestre%>" class="tab__label">
+                  <h5>Niveau :</h5>
+                  <%=donnee.niveau%>
+                    <h5>Semestre :</h5>
+                    <%=donnee.semestre%>
+                      <h5>Filiere :</h5>
+                      <%=donnee.filiere%>
+                        <h5>Annee :</h5>
+                        <%=donnee.annee%>
+                          <h5>Moyenne generale :</h5>
+                          <%=donnee.MOYENNE_generale%>
+                            <h5>Credit Total :</h5>
+                            <%=donnee.credit_Total%>
+                              <h5>Desition :</h5>
+                              <%=donnee.Desition%>
+                </label>
+                <div class="tab__content">
+                  <table class="center">
+                    <tr>
+                      <th>Code</th>
+                      <th>NCC</th>
+                      <th>NSN</th>
+                      <th>NSR</th>
+                      <th>Moyenne</th>
+                      <th>Capit</th>
+                      <th>Moyenne_UE</th>
+                      <th>
+                        UE_Valide
+                      </th>
+                    </tr>
+
+                    <% donnee.matieres.forEach((matiere, index)=> { %>
+                      <tr>
+                        <td>
+                          <%= matiere.codeMatiere %>
+                        </td>
+                        <td>
+                          <%= matiere.NCC %>
+                        </td>
+                        <td>
+                          <%= matiere.NSN %>
+                        </td>
+                        <td>
+                          <%= matiere.NCR %>
+                        </td>
+                        <td>
+                          <%= matiere.Moy %>
+                        </td>
+                        <td>
+                          <%= matiere.Capit %>
+                        </td>
+                        <!-- Afficher la Moyenne_UE correspondant aux trois premiers caractères du codeMatiere -->
+                        <% let codeMatierePrefix=matiere.codeMatiere.slice(0, 4); %>
+                          <% let moduleMoyenneUE=donnee.modules.find(module=> module.Module
+                            === codeMatierePrefix); %>
+                            <td>
+                              <%= moduleMoyenneUE ? moduleMoyenneUE.MOYENNE_UE : 'N/A' %>
+                            </td>
+                            <td>
+                              <%= moduleMoyenneUE ? moduleMoyenneUE. UE_Valide : 'N/A' %>
+                            </td>
+                      </tr>
+                      <% }); %>
+
+
+                  </table>
+                </div>
+              </div>
+              <% }); %>
+
+          </section>
+
+
+        </section>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+  </div>
+</body>
+
+<script>
+  // Fonction pour ajouter une option à un sélecteur
+  function addOption(selectElement, value, text) {
+    const option = document.createElement('option');
+    option.value = value;
+    option.text = text;
+    selectElement.add(option);
+  }
+
+  // Récupérer les éléments HTML du niveau, du semestre et de la filière
+  const niveauSelect = document.getElementById('niveau');
+  const semestreSelect = document.getElementById('semestre');
+  const filiereSelect = document.getElementById('filiere');
+
+  // Ajouter un gestionnaire d'événement pour détecter les changements dans le champ du niveau
+  niveauSelect.addEventListener('change', function () {
+    // Réinitialiser les options du champ du semestre
+    semestreSelect.innerHTML = '';
+
+    // Réinitialiser les options du champ de la filière
+    filiereSelect.innerHTML = '';
+
+    // Ajouter les options appropriées en fonction du niveau sélectionné
+    if (niveauSelect.value === 'L1') {
+      addOption(semestreSelect, 'S1', 'S1');
+      addOption(semestreSelect, 'S2', 'S2');
+      addOption(filiereSelect, 'T', 'T');
+    } else if (niveauSelect.value === 'L2') {
+      addOption(semestreSelect, 'S3', 'S3');
+      addOption(semestreSelect, 'S4', 'S4');
+      addOption(filiereSelect, 'DSI', 'DSI');
+      addOption(filiereSelect, 'CNM', 'CNM');
+      addOption(filiereSelect, 'RSS', 'RSS');
+    } else if (niveauSelect.value === 'L3') {
+      addOption(semestreSelect, 'S5', 'S5');
+      addOption(semestreSelect, 'S6', 'S6');
+      addOption(filiereSelect, 'DSI', 'DSI');
+      addOption(filiereSelect, 'CNM', 'CNM');
+      addOption(filiereSelect, 'RSS', 'RSS');
+    }
+  });
+
+  // Ajouter un gestionnaire d'événement pour détecter les changements dans le champ du semestre
+  semestreSelect.addEventListener('change', function () {
+    // Réinitialiser les options du champ de la filière
+    filiereSelect.innerHTML = '';
+
+    // Ajouter les options appropriées en fonction du semestre sélectionné
+    if (niveauSelect.value === 'L1' && semestreSelect.value === 'S1') {
+      addOption(filiereSelect, 'T', 'T');
+    } else if (niveauSelect.value === 'L1' && semestreSelect.value === 'S2') {
+      addOption(filiereSelect, 'DSI', 'DSI');
+      addOption(filiereSelect, 'CNM', 'CNM');
+      addOption(filiereSelect, 'RSS', 'RSS');
+    } else if (niveauSelect.value === 'L2') {
+      // Ajouter les options de filière appropriées pour L2
+      addOption(filiereSelect, 'DSI', 'DSI');
+      addOption(filiereSelect, 'CNM', 'CNM');
+      addOption(filiereSelect, 'RSS', 'RSS');
+
+    } else if (niveauSelect.value === 'L3') {
+      addOption(filiereSelect, 'DSI', 'DSI');
+      addOption(filiereSelect, 'CNM', 'CNM');
+      addOption(filiereSelect, 'RSS', 'RSS');
+      // Ajouter les options de filière appropriées pour L3
+    }
+  });
+
+  // Déclencher l'événement de changement pour mettre à jour les options initiales
+  niveauSelect.dispatchEvent(new Event('change'));
+
+</script>
+<script>
+  var myLink = document.getElementById("home");
+  myLink.onclick = function () {
+    const currentUrl = window.location.href;
+    const newUrl = currentUrl.replace('/matierr', '/home');
+    window.location.href = newUrl;
+    return false;
+  };
+  var myLinkk = document.getElementById("env_reclamation");
+  myLinkk.onclick = function () {
+    var currentURL = window.location.href;
+    var urlParams = new URLSearchParams(currentURL.split('?')[1]);
+    var mat = urlParams.get('mat');
+    window.location.href = "env_reclamation/" + mat;
+    return false;
+  };
+  var myLinkkk = document.getElementById("reclamation");
+  myLinkkk.onclick = function () {
+    const currentUrl = window.location.href;
+    const newUrl = currentUrl.replace('/matierr1', '/s_reclamation1');
+    window.location.href = newUrl;
+    return false;
+  };
+</script>
+<script>
+  // Script pour la recherche
+  const searchInput = document.getElementById('search-input');
+  searchInput.addEventListener('input', handleSearch);
+
+  function handleSearch(event) {
+    const searchTerm = event.target.value.toLowerCase();
+    const sections = document.getElementsByClassName('section');
+    let matchFound = false;
+
+    Array.from(sections).forEach(section => {
+      const matricule = section.querySelector('h2').textContent.toLowerCase();
+      const niveau = section.querySelector('h3:nth-child(2)').textContent.toLowerCase();
+      const semestre = section.querySelector('h3:nth-child(3)').textContent.toLowerCase();
+      const filiere = section.querySelector('h3:nth-child(4)').textContent.toLowerCase();
+
+      if (
+        matricule.includes(searchTerm) ||
+        niveau.includes(searchTerm) ||
+        semestre.includes(searchTerm) ||
+        filiere.includes(searchTerm)
+      ) {
+        section.style.display = 'block';
+        matchFound = true;
+      } else {
+        section.style.display = 'none';
+      }
+    });
+
+    if (!matchFound) {
+      if (searchTerm) {
+        alert('Aucune donnée trouvée.');
+      } else {
+        alert('Veuillez saisir un terme de recherche.');
+      }
+    }
+  }
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#sidebarCollapse').on('click', function () {
+      $('#sidebar').toggleClass('active');
+    });
+  });
+
+</script>
+
+</body>
+
+<script>
+  function showSignupForm() {
+    document.getElementById("login-form").style.display = "none";
+    document.getElementById("signup-form").style.display = "block";
+  }
+
+  function showLoginForm() {
+    document.getElementById("signup-form").style.display = "none";
+    document.getElementById("login-form").style.display = "block";
+  }
+</script>
+<script>
+  $(document).ready(function () {
+    var url = window.location.href;
+    if (url.endsWith('/admin')) {
+      loadContent('/reclamations');
+    }
+    // handle link clicks
+    $(document).on('click', 'a', function (event) {
+      event.preventDefault();
+      var url = $(this).attr('href');
+      loadContent(url);
+      history.pushState({ url: url }, null, url);
+    });
+
+    // handle back/forward buttons
+    window.addEventListener('popstate', function (event) {
+      if (event.state != null) {
+        loadContent(event.state.url);
+      } else {
+        loadContent('/reclamations');
+      }
+    });
+
+    // check for hash in URL
+    if (window.location.hash) {
+      var hash = window.location.hash.substring(1);
+      loadContent(hash);
+    }
+
+    $('#Logout').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/log'; // redirect the user to the logout page
+    });
+    $('#r').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/r'; // redirect the user to the logout page
+    });
+    $('#date_prof').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/date_prof'; // redirect the user to the logout page
+    });
+    $('#date').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/date'; // redirect the user to the logout page
+    });
+    $('#er').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/eleve'; // redirect the user to the logout page
+    });
+    $('#er_prof').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/eleve_prof'; // redirect the user to the logout page
+    });
+    $('#et').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/eleve1'; // redirect the user to the logout page
+    });
+    $('#m').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/matier'; // redirect the user to the logout page
+    });
+    $('#table').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/table'; // redirect the user to the logout page
+    });
+    $('#Reclamations').click(function (e) {
+      e.preventDefault(); // prevent the default click behavior
+      window.location.href = '/eleve_prof'; // redirect the user to the logout page
+    });
+  });
+
+  function loadContent(url) {
+    $('#content-container').load(url + ' #content');
+  }
+</script>
+</body>
+
+
+
+</html>

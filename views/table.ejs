@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+
+
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            list-style: none;
+            text-decoration: none;
+            font-family: 'Josefin Sans', sans-serif;
+        }
+
+        body {
+            background-color: #f3f5f9;
+        }
+
+        .wrapper {
+            display: flex;
+            position: relative;
+        }
+
+        .wrapper .sidebar {
+            width: 200px;
+            height: 100%;
+            background: #fbfbfd;
+            padding: 30px 0px;
+            position: fixed;
+        }
+
+        .wrapper .sidebar h2 {
+            color: #fff;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .wrapper .sidebar ul li {
+            padding: 15px;
+            border-bottom: 1px solid #2D3250;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .wrapper .sidebar ul li a {
+            color: #2D3250;
+            display: block;
+        }
+
+        .wrapper .sidebar ul li a .fas {
+            width: 25px;
+        }
+
+        .wrapper .sidebar ul li:hover {
+            background-color: #FC7300;
+        }
+
+        .wrapper .sidebar ul li:hover a {
+            color: #fff;
+        }
+
+        .wrapper .sidebar .social_media {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+        }
+
+        .wrapper .sidebar .social_media a {
+            display: block;
+            width: 40px;
+            background: #FC7300;
+            height: 40px;
+            line-height: 45px;
+            text-align: center;
+            margin: 0 5px;
+            color: #2D3250;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+
+        .wrapper .main_content {
+            width: 100%;
+            margin-left: 200px;
+        }
+
+        .wrapper .main_content .header {
+            padding: 20px;
+            background: #fff;
+            color: #717171;
+            border-bottom: 1px solid #e0e4e8;
+        }
+
+        .wrapper .main_content .info {
+            margin: 20px;
+            color: #717171;
+            line-height: 25px;
+        }
+
+        .wrapper .main_content .info div {
+            margin-bottom: 20px;
+        }
+    </style>
+    <style>
+        .separation {
+            display: flex;
+            justify-content: space-between;
+            /* Align items to the right */
+            margin-top: 30px;
+
+        }
+
+        .separation,
+        input {
+            margin-right: 10px;
+        }
+
+        #exportToExcel {
+            background-color: #FC7300;
+
+
+        }
+
+        .separation button {
+            margin-left: auto;
+        }
+
+        #toggleButton {
+            background-color: #FC7300;
+            margin-left: 650px;
+
+        }
+
+        .search {
+            border-radius: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Add CSS for table borders */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 30px;
+        }
+
+
+        th,
+        td {
+            border: 1px solid black;
+        }
+
+        /* Add your existing CSS classes for cell background colors here */
+        .green-bg {
+            background-color: green;
+        }
+
+        .green-dg {
+            background-color: rgb(20, 86, 20);
+        }
+
+        .yellow-bg {
+            background-color: yellow;
+        }
+
+        .red-bg {
+            background-color: red;
+        }
+
+        .red-dg {
+            background-color: rgb(137, 17, 17);
+        }
+
+        .red-db {
+            background-color: rgb(107, 101, 68);
+        }
+
+        /* Define font family and size for the whole document */
+        html {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 16px;
+        }
+
+        /* Set a background color */
+        body {
+            background-color: #f2f2f2;
+        }
+
+        /* Define the sidebar */
+        .my-own-container .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 220px;
+            background-color: #fcfcfc;
+            z-index: 1000;
+            /* Set a high z-index */
+        }
+
+        .my-own-container .navbar-brand {
+            background-image: url('./Capture\ d’écran\ 2023-04-09\ 033300.png');
+            background-repeat: no-repeat;
+            background-size: contain;
+            width: 190px;
+            /* set the width of your image */
+            height: 50px;
+            /* set the height of your image */
+            display: block;
+            /* make the link a block element */
+            text-indent: -9999px;
+            /* hide the link text */
+            margin-top: 50px;
+            margin-left: 16px;
+        }
+
+        /* Style the navigation */
+        .my-own-container .my-nav {
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        .my-own-container .my-nav ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .my-own-container .my-nav li {
+            margin-bottom: 15px;
+        }
+
+        .my-own-container .my-nav a {
+            display: block;
+            padding: 10px;
+            color: #2D3250;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .my-own-container .my-nav a:hover {
+            background-color: #FC7300;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .my-own-container .my-nav .active a {
+            background-color: #525151;
+        }
+
+        /* Define the main content area */
+        .my-own-container .main {
+            display: flex;
+        }
+
+        .my-own-container #content-container {
+            position: absolute;
+            top: 0;
+            left: 250px;
+            /* Set the left position to the width of the sidebar */
+            right: 0;
+            bottom: 0;
+            padding: 20px;
+            overflow-y: auto;
+            /* Add vertical scroll if necessary */
+        }
+
+
+        /* css ouverture reclamation */
+        .btn-primary {
+            background-color: #2D3250;
+            border-color: #2D3250;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 5px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .mm {
+            margin-left: 50px;
+        }
+
+        .mmm {
+            background-color: #2D3250;
+            border-radius: 5px;
+            color: #fff;
+            border-color: #2D3250;
+            padding: 10px;
+            font-size: 10px;
+        }
+
+        .btn-reclamation {
+            background-color: #2D3250;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-reclamation:hover {
+            background-color: #2D3250;
+        }
+
+        .btn-reclamation11 {
+            background-color: #A76F6F;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-reclamation11:hover {
+            background-color: #a71d2a;
+        }
+
+        .label1 {
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .select1 {
+            padding: 8px;
+
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            box-sizing: border-box;
+            width: 150px;
+            /* Largeur minimale pour les sélecteurs */
+
+            font-size: 13px;
+            border-radius: 20em;
+            font-family: inherit;
+            box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
+            letter-spacing: 0.09em;
+            border-radius: 20em;
+            cursor: pointer;
+            touch-action: manipulation;
+
+
+
+        }
+
+        .option1 {
+            min-width: 150px;
+            /* Largeur minimale pour les options */
+
+        }
+
+        .select-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            /* Pour prendre toute la hauteur de la vue */
+            padding-right: 20px;
+            /* Espacement à droite */
+        }
+
+        .b {
+            margin-bottom: 10px;
+            font-weight: bold;
+            padding: 8px;
+            margin-left: 30px;
+
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            box-sizing: border-box;
+            width: 150px;
+            /* Largeur minimale pour les sélecteurs */
+            border: none;
+            font-size: 13px;
+
+
+            /* Largeur minimale pour les options */
+
+            display: flex;
+
+            align-items: center;
+            /* Pour prendre toute la hauteur de la vue */
+            /* Espacement à droite */
+            display: flex;
+            align-items: center;
+            font-family: inherit;
+            font-weight: 500;
+
+            padding: 0.7em 1.4em 0.7em 1.1em;
+            color: white;
+            background: #ad5389;
+            background: #2D3250;
+            border: none;
+           
+            letter-spacing: 0.05em;
+
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 25%;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <div class="sidebar">
+            <h2>Sidebar</h2>
+            <ul>
+                <li><a style="text-decoration: none;" id="home" href="/home1"><i class="fas fa-home"></i>Accueil</a>
+                </li>
+                <li><a style="text-decoration: none;" id="er" href="/eleve"><i class="fas fa-user"></i>Etudiant
+                        reclamer</a></li>
+                <li><a style="text-decoration: none;" id="m" href="/matier"><i
+                            class="fas fa-address-card"></i>Matieres</a></li>
+                <li><a style="text-decoration: none;" id="r" href="/r"><i class="fas fa-chart-bar"></i>Statistique</a>
+                </li>
+                <li><a style="text-decoration: none;" id="tablee" href="/table"><i class="fas fa-table"></i>PV</a></li>
+                <li><a style="text-decoration: none;" id="date_open" href="/date"><i class="fas fa-clock"></i>Ouvrir la
+                        réclamation</a></li>
+                <li><a style="text-decoration: none;" id="date_prof" href="/date_prof"><i
+                            class="fas fa-clock"></i>Traitement des réclamation</a></li>
+            </ul>
+            <div class="social_media">
+                <li><a id="Logout" href="/log"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+              </div>
+        
+        </div>
+        <div class="main_content">
+            <div id="content-container">
+                <div class="select-container">
+                    <div class="select-pair">
+
+                        <label for="niveau" class="label1">Niveau: </label>
+                        <select name="niveau" id="niveau" class="select1">
+                            <div class="option1">
+                                <option value="L1">L1</option>
+                                <option value="L2">L2</option>
+                                <option value="L3">L3</option>
+                            </div>
+                        </select>
+                    </div>
+                    <div class="select-pair">
+                        <label for="semestre" class="label1">Semestre:</label>
+                        <select name="semestre" id="semestre" class="select1">
+                            <div class="option1">
+                                <option value="S1">S1</option>
+                                <option value="S2">S2</option>
+                                <option value="S3">S3</option>
+                                <option value="S4">S4</option>
+                                <option value="S5">S5</option>
+                                <option value="S6">S6</option>
+                            </div>
+                        </select>
+                    </div>
+                    <div class="select-pair">
+                        <label for="filiere" class="label1">Filière:</label>
+                        <select name="filiere" id="filiere" class="select1">
+                            <div class="option1">
+                                <option value="T">T</option>
+                                <option value="DSI">DSI</option>
+                                <option value="CNM">CNM</option>
+                                <option value="RSS">RSS</option>
+                            </div>
+                        </select>
+
+
+                    </div>
+                    <div class="select-pair">
+                        <label for="annee" class="label1">Sélectionnez l'année :</label>
+                        <select id="annee" name="annee" class="select1"> </select>
+                    </div>
+
+                    <script>
+                        const selectAnnee = document.getElementById('annee');
+                        const anneeActuelle = new Date().getFullYear();
+
+                        // Ajoute les options d'année de l'année actuelle jusqu'à 20 ans en arrière
+                        for (let annee = anneeActuelle; annee >= anneeActuelle - 80; annee--) {
+                            const option = document.createElement('option');
+                            option.value = `${annee}-${annee + 1}`;
+                            option.text = `${annee}-${annee + 1}`; // Format année académique par exemple 2023-2024
+                            selectAnnee.add(option);
+                        }
+                    </script>
+
+
+                    <div class="select-container">
+                        <div class="select-pair">
+                            <div class="option1">
+                                <button id="a" class="b" type="submit">Soumettre</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        // Fonction pour ajouter une option à un sélecteur
+                        function addOption(selectElement, value, text) {
+                            const option = document.createElement('option');
+                            option.value = value;
+                            option.text = text;
+                            selectElement.add(option);
+                        }
+
+                        // Récupérer les éléments HTML du niveau, du semestre et de la filière
+                        const niveauSelect = document.getElementById('niveau');
+                        const semestreSelect = document.getElementById('semestre');
+                        const filiereSelect = document.getElementById('filiere');
+
+                        // Ajouter un gestionnaire d'événement pour détecter les changements dans le champ du niveau
+                        niveauSelect.addEventListener('change', function () {
+                            // Réinitialiser les options du champ du semestre
+                            semestreSelect.innerHTML = '';
+
+                            // Réinitialiser les options du champ de la filière
+                            filiereSelect.innerHTML = '';
+
+                            // Ajouter les options appropriées en fonction du niveau sélectionné
+                            if (niveauSelect.value === 'L1') {
+                                addOption(semestreSelect, 'S1', 'S1');
+                                addOption(semestreSelect, 'S2', 'S2');
+                                addOption(filiereSelect, 'T', 'T');
+                            } else if (niveauSelect.value === 'L2') {
+                                addOption(semestreSelect, 'S3', 'S3');
+                                addOption(semestreSelect, 'S4', 'S4');
+                                addOption(filiereSelect, 'DSI', 'DSI');
+                                addOption(filiereSelect, 'CNM', 'CNM');
+                                addOption(filiereSelect, 'RSS', 'RSS');
+                            } else if (niveauSelect.value === 'L3') {
+                                addOption(semestreSelect, 'S5', 'S5');
+                                addOption(semestreSelect, 'S6', 'S6');
+                                addOption(filiereSelect, 'DSI', 'DSI');
+                                addOption(filiereSelect, 'CNM', 'CNM');
+                                addOption(filiereSelect, 'RSS', 'RSS');
+                            }
+                        });
+
+                        // Ajouter un gestionnaire d'événement pour détecter les changements dans le champ du semestre
+                        semestreSelect.addEventListener('change', function () {
+                            // Réinitialiser les options du champ de la filière
+                            filiereSelect.innerHTML = '';
+
+                            // Ajouter les options appropriées en fonction du semestre sélectionné
+                            if (niveauSelect.value === 'L1' && semestreSelect.value === 'S1') {
+                                addOption(filiereSelect, 'T', 'T');
+                            } else if (niveauSelect.value === 'L1' && semestreSelect.value === 'S2') {
+                                addOption(filiereSelect, 'DSI', 'DSI');
+                                addOption(filiereSelect, 'CNM', 'CNM');
+                                addOption(filiereSelect, 'RSS', 'RSS');
+                            } else if (niveauSelect.value === 'L2') {
+                                // Ajouter les options de filière appropriées pour L2
+                                addOption(filiereSelect, 'DSI', 'DSI');
+                                addOption(filiereSelect, 'CNM', 'CNM');
+                                addOption(filiereSelect, 'RSS', 'RSS');
+
+                            } else if (niveauSelect.value === 'L3') {
+                                addOption(filiereSelect, 'DSI', 'DSI');
+                                addOption(filiereSelect, 'CNM', 'CNM');
+                                addOption(filiereSelect, 'RSS', 'RSS');
+                                // Ajouter les options de filière appropriées pour L3
+                            }
+                        });
+
+                        // Déclencher l'événement de changement pour mettre à jour les options initiales
+                        niveauSelect.dispatchEvent(new Event('change'));
+
+                    </script>
+                    <script>document.addEventListener('DOMContentLoaded', function () {
+
+                            document.getElementById('a').addEventListener('click', function () {
+                                const niveau = document.getElementById('niveau').value;
+                                const semestre = document.getElementById('semestre').value;
+                                const filiere = document.getElementById('filiere').value;
+                                const selectAnnee = document.getElementById('annee').value;
+
+
+                                console.log('Niveau:', niveau);
+                                console.log('Semestre:', semestre);
+                                console.log('Filière:', filiere);
+                                window.semestreData = {
+                                    niveau: niveau,
+                                    semestre: semestre,
+                                    filiere: filiere,
+                                    selectAnnee: selectAnnee
+                                };
+
+                                // Vous pouvez utiliser ces valeurs comme nécessaire
+
+                                window.location.href = `/table?niveau=${niveau}&semestre=${semestre}&filiere=${filiere}&selectAnnee=${selectAnnee}`;
+
+
+                            });
+
+                        });
+
+                    </script>
+                </div>
+                <div id="content">
+                    <section class="home">
+                        <section class="c-section">
+                            <!-- Remove the search button -->
+                            <div class="separation">
+                                <label for="matricule-search"
+                                    style=" font-weight: bold; margin-top: 10px; margin-right: 10px;">Search by
+                                    Matricule:</label>
+                                <input type="text" id="matricule-search" class="search" placeholder="Enter Matricule">
+                              
+                                <button id="toggleButton">Toggle Columns</button>
+
+                                <button onclick="exportToExcel('table')" id="exportToExcel">Export to Excel</button>
+                            </div>
+                            <% if(data.length !=0) {%>
+                                <table id="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Matricule</th>
+                                            <!-- Add headers for matieres array -->
+                                            <% data[0].matieres.forEach(course=> { %>
+                                                <% if(course.NCC) { %>
+                                                    <th class="hidden" id="<%= course.NCC %>">
+                                                        <%= course.codeMatiere %> NCC
+                                                    </th>
+                                                    <th class="hidden" id="<%= course.NSN %>">
+                                                        <%= course.codeMatiere %> NSN
+                                                    </th>
+                                                    <th class="hidden" id="<%= course.NSR %>">
+                                                        <%= course.codeMatiere %> NSR
+                                                    </th>
+                                                    <th id="<%= course.NSR %>">
+                                                        <%= course.codeMatiere %> Moy
+                                                    </th>
+                                                    <th id="<%= course.Moy %>">
+                                                        <%= course.codeMatiere %> Capit
+                                                    </th>
+                                                    <% } else{ %>
+                                                        <th id="<%= course.MOYENNE_UE %>">
+                                                            <%= course.Module %> MOYENNE_UE
+                                                        </th>
+                                                        <th id="<%=course.UE_Valide %>">
+                                                            <%= course.Module %> UE_Valide
+                                                        </th>
+                                                        <% } %>
+                                                            <% }); %>
+                                                                <!-- Add headers for MOYENNE_generale, credit_Total, and Desition -->
+                                                                <th>MOYENNE_generale</th>
+                                                                <th>credit_Total</th>
+                                                                <th>Decision</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <% data.forEach(student=> { %>
+                                            <tr>
+                                                <td>
+                                                    <%= student.matricule %>
+                                                </td>
+                                                <!-- Loop through matieres array for each student -->
+                                                <% student.matieres.forEach(note=> { %>
+                                                    <% if(note.NCC) { %>
+                                                        <td class="hidden">
+                                                            <%= note.NCC %>
+                                                        </td>
+                                                        <td class="hidden">
+                                                            <%= note.NSN %>
+                                                        </td>
+                                                        <td class="hidden">
+                                                            <%= note.NSR %>
+                                                        </td>
+                                                        <td>
+                                                            <%= note.Moy %>
+                                                        </td>
+                                                        <td class="<%= getColorClass(note.Capit) %>">
+                                                            <%= note.Capit %>
+                                                        </td>
+
+                                                        <% } else{ %>
+                                                            <td>
+                                                                <%= note.MOYENNE_UE %>
+                                                            </td>
+                                                            <td class="<%= getColorClass(note.UE_Valide) %>">
+                                                                <%=note.UE_Valide %>
+                                                            </td>
+                                                            <% } %>
+                                                                <% }); %>
+
+                                                                    <!-- Add the "MOYENNE_generale," "credit_Total," and "Desition" values here -->
+                                                                    <td>
+                                                                        <%= student.MOYENNE_generale %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= student.credit_Total %>
+                                                                    </td>
+                                                                    <td class="<%= getColorClass(student.Desition) %>">
+                                                                        <%= student.Desition %>
+                                                                    </td>
+                                            </tr>
+                                            <% }); %>
+                                    </tbody>
+                                </table>
+                                <% } %>
+                                    <% if(data.length==0){ %>
+                                        <h1>aucun resultas</h1>
+                                        <% } %>
+                        </section>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var hiddenColumns = document.querySelectorAll(".hidden");
+        var button = document.getElementById("toggleButton");
+
+        // Set the initial button text based on the initial state of the columns
+        if (hiddenColumns.length > 0) {
+            button.textContent = "Show";
+        } else {
+            button.textContent = "Hide";
+        }
+
+        button.addEventListener("click", function () {
+            hiddenColumns.forEach(function (column) {
+                column.classList.toggle("hidden"); // Toggle the "hidden" class
+            });
+
+            // Toggle the button text
+            if (button.textContent === "Show") {
+                button.textContent = "Hide";
+            } else {
+                button.textContent = "Show";
+            }
+        });
+    </script>
+
+<script>
+    document.getElementById("matricule-search").addEventListener("input", function () {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("matricule-search");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("table");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows and hide those that don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0]; // Assuming the matricule is in the first column
+
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    });
+</script>
+<script>
+function filterTable() {
+var input = document.getElementById("searchInput").value.toUpperCase();
+var table = document.getElementById("table");
+var headers = table.getElementsByTagName("th");
+var cells = table.getElementsByTagName("td");
+var tr = table.getElementsByTagName("tr"); // Declare 'tr' using 'var' or 'let'
+
+for (var i = 0; i < headers.length; i++) {
+    var header = headers[i];
+    var headerText = header.textContent || header.innerText;
+
+    if (headerText.toUpperCase().indexOf(input) > -1) {
+        header.style.display = ""; // Show the header
+        for (var j = 0; j < tr.length; j++) {
+            var currentTd = tr[j].getElementsByTagName("td")[i];
+            if (currentTd) {
+                currentTd.style.display = ""; // Show the corresponding td in the row
+            }
+        }
+    } else {
+        header.style.display = "none"; // Hide the header
+        for (var j = 0; j < tr.length; j++) {
+            var currentTd = tr[j].getElementsByTagName("td")[i];
+            if (currentTd) {
+                currentTd.style.display = "none"; // Hide the corresponding td in the row
+            }
+        }
+    }
+}
+}
+
+
+</script>
+<script>
+    function exportToExcel(tableID) {
+      var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
+      var textRange; var j = 0;
+      tab = document.getElementById(tableID); // id of table
+
+      for (j = 0; j < tab.rows.length; j++) {
+        tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+        //tab_text=tab_text+"</tr>";
+      }
+
+      tab_text = tab_text + "</table>";
+      tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, ""); //remove if u want links in your table
+      tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+      tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+      var ua = window.navigator.userAgent;
+      var msieEdge = ua.indexOf("Edge");
+      var fileName = 'excel_data';
+      if (msieEdge > 0 || navigator.userAgent.match(/Trident.*rv:11\./)) {
+        // if Internet Explorer
+        var blob = new Blob([tab_text], {
+          type: "application/csv;charset=utf-8;"
+        });
+        navigator.msSaveBlob(blob, fileName + '.xls');
+      } else {
+        //other browser not tested on IE 11
+        var blob2 = new Blob([tab_text], {
+          type: "application/csv;charset=utf-8;"
+        });
+        var filename = fileName + '.xls';
+        var elem = window.document.createElement('a');
+        elem.href = window.URL.createObjectURL(blob2);
+        elem.download = filename;
+        document.body.appendChild(elem);
+        elem.click();
+        document.body.removeChild(elem);
+      }
+    }
+  </script>
+</body>
+<script>
+    $(document).ready(function () {
+        var url = window.location.href;
+        if (url.endsWith('/admin')) {
+            loadContent('/reclamations');
+        }
+        // handle link clicks
+        $(document).on('click', 'a', function (event) {
+            event.preventDefault();
+            var url = $(this).attr('href');
+            loadContent(url);
+            history.pushState({ url: url }, null, url);
+        });
+
+        // handle back/forward buttons
+        window.addEventListener('popstate', function (event) {
+            if (event.state != null) {
+                loadContent(event.state.url);
+            } else {
+                loadContent('/reclamations');
+            }
+        });
+
+        // check for hash in URL
+        if (window.location.hash) {
+            var hash = window.location.hash.substring(1);
+            loadContent(hash);
+        }
+
+        $('#Logout').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/log'; // redirect the user to the logout page
+        });
+        $('#r').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/r'; // redirect the user to the logout page
+        });
+        $('#date_prof').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/date_prof'; // redirect the user to the logout page
+        });
+        $('#date').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/date'; // redirect the user to the logout page
+        });
+        $('#er').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/eleve'; // redirect the user to the logout page
+        });
+        $('#er_prof').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/eleve_prof'; // redirect the user to the logout page
+        });
+        $('#et').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/eleve1'; // redirect the user to the logout page
+        });
+        $('#m').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/matier'; // redirect the user to the logout page
+        });
+        $('#tablee').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/table'; // redirect the user to the logout page
+        });
+        $('#Reclamations').click(function (e) {
+            e.preventDefault(); // prevent the default click behavior
+            window.location.href = '/eleve_prof'; // redirect the user to the logout page
+        });
+    });
+
+    function loadContent(url) {
+        $('#content-container').load(url + ' #content');
+    }
+</script>
+
+</html>
